@@ -8,5 +8,5 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    api_url = os.getenv("API_URL", "default_value")
-    return {"message": f"API URL is {api_url}"}
+    #api_url = os.getenv("API_URL", "default_value")
+    return {"message": "hello-update"}
