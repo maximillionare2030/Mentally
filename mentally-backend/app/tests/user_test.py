@@ -1,0 +1,17 @@
+import requests
+
+token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjFhYWMyNzEwOTkwNDljMGRmYzA1OGUwNjEyZjA4ZDA2YzMwYTA0MTUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vbWVudGFsbHktOTU3ZGIiLCJhdWQiOiJtZW50YWxseS05NTdkYiIsImF1dGhfdGltZSI6MTczNDU5MDIyOSwidXNlcl9pZCI6Im5JN01GRXBOM09YSmIybHh0ZGNDQWlueVBkQTMiLCJzdWIiOiJuSTdNRkVwTjNPWEpiMmx4dGRjQ0FpbnlQZEEzIiwiaWF0IjoxNzM0NTkwMjI5LCJleHAiOjE3MzQ1OTM4MjksImVtYWlsIjoic2FtcGxlQGV4YW1wbGUuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJmaXJlYmFzZSI6eyJpZGVudGl0aWVzIjp7ImVtYWlsIjpbInNhbXBsZUBleGFtcGxlLmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6InBhc3N3b3JkIn19.cl5aykeB5k9t4JKctrixjRGa6uOcE7DnChoHYZfdGcnrwbl45QD4m50D0T8xnMNp6ootcfPVw-Mr1alM_iGSrlulMDFWxKt-T80cVLlcv43GHT-QRrp8Q5okW7jYtiGtGRNE3vzs6trmOeInigBPJn8laLMql_prTuBC-CgTZQYd0kAEaxaB4Iila6SEGS5S6mdEK3CSTnWF1l9J7KwFqfps2kTyOanWQ6maw4ryVAh4kGbPjw0mZLVgtqZqTPYLlypYksioxUUbWmqJ_WX1vaEZ1cmT3-XN8utaGdSJ48vwd_2ZHqXPhiG-cqFBnM9HXG1OKjQB6nkidnin-1njzQ"
+def test_validate_endpoint():
+    headers = {
+        'authorization':token
+    }
+
+    response = requests.post(
+        "http://127.0.0.1:8000/user/ping",
+        headers=headers
+    )
+
+    return response.text
+
+
+print(test_validate_endpoint())

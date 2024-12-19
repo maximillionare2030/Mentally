@@ -1,0 +1,93 @@
+{
+        "PHQ-9": {
+          "question": "Over the last 2 weeks, how often have you been bothered by the following problems?",
+          "items": [
+            {
+              "question": "Little interest or pleasure in doing things",
+              "responses": {
+                "Not at all": 0,
+                "Several days": 1,
+                "More than half the days": 2,
+                "Nearly every day": 3
+              }
+            },
+            {
+              "question": "Feeling down, depressed, or hopeless",
+              "responses": {
+                "Not at all": 0,
+                "Several days": 1,
+                "More than half the days": 2,
+                "Nearly every day": 3
+              }
+            },
+            {
+              "question": "Trouble falling asleep, staying asleep, or sleeping too much",
+              "responses": {
+                "Not at all": 0,
+                "Several days": 1,
+                "More than half the days": 2,
+                "Nearly every day": 3
+              }
+            },
+            {
+              "question": "Feeling tired or having little energy",
+              "responses": {
+                "Not at all": 0,
+                "Several days": 1,
+                "More than half the days": 2,
+                "Nearly every day": 3
+              }
+            },
+            {
+              "question": "Poor appetite or overeating",
+              "responses": {
+                "Not at all": 0,
+                "Several days": 1,
+                "More than half the days": 2,
+                "Nearly every day": 3
+              }
+            },
+            {
+              "question": "Feeling bad about yourself - or that you’re a failure or have let yourself or your family down",
+              "responses": {
+                "Not at all": 0,
+                "Several days": 1,
+                "More than half the days": 2,
+                "Nearly every day": 3
+              }
+            },
+            {
+              "question": "Trouble concentrating on things, such as reading the newspaper or watching television",
+              "responses": {
+                "Not at all": 0,
+                "Several days": 1,
+                "More than half the days": 2,
+                "Nearly every day": 3
+              }
+            },
+            {
+              "question": "Moving or speaking so slowly that other people could have noticed. Or, the opposite - being so fidgety or restless that you have been moving around a lot more than usual",
+              "responses": {
+                "Not at all": 0,
+                "Several days": 1,
+                "More than half the days": 2,
+                "Nearly every day": 3
+              }
+            },
+            {
+              "question": "Thoughts that you would be better off dead or of hurting yourself in some way",
+              "responses": {
+                "Not at all": 0,
+                "Several days": 1,
+                "More than half the days": 2,
+                "Nearly every day": 3
+              }
+            }
+          ]
+        },
+        "EKMAN-EMOTIONS": {
+          "question": {
+            "Please rate the following" : [-100, 100]
+          }
+        }
+  }
