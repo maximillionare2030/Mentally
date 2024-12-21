@@ -50,51 +50,61 @@ const Home = () => {
 
   return (
     <div>
-      {/* Welcome message section */}
-      <div className="h-screen bg-gradient-to-b from-mint to-lightBlue flex flex-col gap-8 justify-center items-center">
-        <div
-          ref={welcomeRef}
-          className="text-center bg-lightGrey opacity-70 border-2 border-lightGrey rounded-2xl p-20 w-3/4 h-1/8 animate-fadeInUp hover:scale-110 hover:opacity-80 transition-transform duration-500"
-        >
-          <h1>{message}</h1>
-        </div>
-              {/* MCQ prompt section */}
-      {MCQ_prompt && (
-          <div
-            ref={MCQ_container}
-            className="text-center bg-lightGrey opacity-70 border-2 border-lightGrey rounded-2xl p-52 w-3/4 h-1/8 animate-fadeInUp hover:opacity-80 hover:scale-110 transition-transform duration-500"
-          >
-            <p className="text-6xl">Would you like to take a short Mental Health Test?</p>
-
-            <div className="text-center justify-center p-10 flex flex-row gap-10 mt-20">
-              <button
-                onClick={scrollToTest} // Scroll to the Mental Health Test section on click
-                className="bg-lavendar text-4xl border-2 p-2 rounded-xl"
-              >
-                Yes
-              </button>
-            </div>
-          </div>
-      )}
-      </div>
-
-
-      {/* New section - Mental Health Test link */}
+    {/* Welcome message section */}
+    <div className="h-screen bg-gradient-to-b from-mint to-lightBlue flex flex-col gap-12 justify-center items-center">
       <div
-        ref={mentalHealthTestRef}
-        className="h-screen bg-gradient-to-b from-lightBlue to-lavendar flex flex-col gap-8 justify-center items-center"
+        ref={welcomeRef}
+        className="text-center bg-lightGrey opacity-80 border-2 border-darkGrey rounded-2xl p-16 w-3/4 animate-fadeInUp hover:scale-105 hover:opacity-90 transition-transform duration-500 shadow-lg"
       >
-        <div className="w-3/4 bg-lightGrey p-16 border-2 border-lightGrey rounded-2xl text-center opacity-80 hover:opacity-100 transition-transform duration-500">
-          <p className="text-4xl text-darkBlue mb-8">Ready for the Mental Health Test?</p>
-          <a
-            href="#"
-            className="bg-lavendar text-4xl border-2 p-4 rounded-xl"
+        <h1 className="text-6xl font-bold text-darkBlue mb-4">{message}</h1>
+        <p className="text-xl text-gray-700">
+          We're here to help you take meaningful steps toward better mental health.
+        </p>
+      </div>
+          {/* MCQ prompt section */}
+    {MCQ_prompt && (
+      <div
+        ref={MCQ_container}
+        className="text-center bg-lightGrey opacity-80 border-2 border-darkGrey rounded-2xl p-12 w-3/4 animate-fadeInUp hover:scale-105 hover:opacity-90 transition-transform duration-500 shadow-lg"
+      >
+        <p className="text-5xl font-semibold text-darkBlue mb-6">
+          Ready to take steps toward improving your mental health?
+        </p>
+        <p className="text-lg text-gray-700 mb-8">
+          Start your journey with personalized and clinically backed resources designed for you.
+        </p>
+        <div className="flex justify-center">
+          <button
+            onClick={scrollToTest}
+            className="bg-lavendar text-3xl text-white font-medium py-3 px-8 rounded-lg hover:bg-darkLavendar transition-transform duration-300"
           >
-            Start the Test
-          </a>
+            Let's Begin!
+          </button>
         </div>
+      </div>
+    )}
+    </div>
+  
+    {/* New section - Mental Health Test link */}
+    <div
+      ref={mentalHealthTestRef}
+      className="h-screen bg-gradient-to-b from-lightBlue to-lavendar flex flex-col gap-12 justify-center items-center"
+    >
+      <div className="w-3/4 bg-lightGrey p-12 border-2 border-darkGrey rounded-2xl text-center opacity-90 hover:opacity-100 transition-transform duration-500 shadow-lg">
+        <p className="text-5xl text-darkBlue font-semibold mb-6">Clinically Validated Mental Health Assessment</p>
+        <p className="text-xl text-gray-700 mb-8">
+          This test is designed by mental health professionals and supported by extensive research. Your results are confidential and intended to guide your well-being journey.
+        </p>
+        <a
+          href="/starter-test"
+          className="bg-lavendar text-3xl text-white font-medium py-3 px-8 rounded-lg hover:bg-darkLavendar transition-colors duration-300"
+        >
+          Access the Test
+        </a>
       </div>
     </div>
+  </div>
+  
   );
 };
 

@@ -1,93 +1,167 @@
 {
-        "PHQ-9": {
-          "question": "Over the last 2 weeks, how often have you been bothered by the following problems?",
-          "items": [
-            {
-              "question": "Little interest or pleasure in doing things",
-              "responses": {
-                "Not at all": 0,
-                "Several days": 1,
-                "More than half the days": 2,
-                "Nearly every day": 3
+  "PHQ-9": {
+    "question": "Over the last 2 weeks, how often have you been bothered by the following problem?",
+    "items": [
+      {
+        "question": "Little interest or pleasure in doing things",
+        "responses": {
+          "Not at all": 0,
+          "Several days": 1,
+          "More than half the days": 2,
+          "Nearly every day": 3
+        }
+      },
+      {
+        "question": "Feeling down, depressed, or hopeless",
+        "responses": {
+          "Not at all": 0,
+          "Several days": 1,
+          "More than half the days": 2,
+          "Nearly every day": 3
+        }
+      },
+      {
+        "question": "Trouble falling asleep, staying asleep, or sleeping too much",
+        "responses": {
+          "Not at all": 0,
+          "Several days": 1,
+          "More than half the days": 2,
+          "Nearly every day": 3
+        }
+      },
+      {
+        "question": "Feeling tired or having little energy",
+        "responses": {
+          "Not at all": 0,
+          "Several days": 1,
+          "More than half the days": 2,
+          "Nearly every day": 3
+        }
+      },
+      {
+        "question": "Poor appetite or overeating",
+        "responses": {
+          "Not at all": 0,
+          "Several days": 1,
+          "More than half the days": 2,
+          "Nearly every day": 3
+        }
+      },
+      {
+        "question": "Feeling bad about yourself - or that you’re a failure or have let yourself or your family down",
+        "responses": {
+          "Not at all": 0,
+          "Several days": 1,
+          "More than half the days": 2,
+          "Nearly every day": 3
+        }
+      },
+      {
+        "question": "Trouble concentrating on things, such as reading the newspaper or watching television",
+        "responses": {
+          "Not at all": 0,
+          "Several days": 1,
+          "More than half the days": 2,
+          "Nearly every day": 3
+        }
+      },
+      {
+        "question": "Moving or speaking so slowly that other people could have noticed. Or, the opposite - being so fidgety or restless that you have been moving around a lot more than usual",
+        "responses": {
+          "Not at all": 0,
+          "Several days": 1,
+          "More than half the days": 2,
+          "Nearly every day": 3
+        }
+      },
+      {
+        "question": "Thoughts that you would be better off dead or of hurting yourself in some way",
+        "responses": {
+          "Not at all": 0,
+          "Several days": 1,
+          "More than half the days": 2,
+          "Nearly every day": 3
+        }
+      }
+    ]
+  },
+    "EKMAN-EMOTIONS": {
+      "items": [
+        {
+          "happiness": {
+            "questions": [
+              {
+                "question": "What makes you feel most joyful?",
+                "answers": ["Spending time with loved ones", "Achieving a personal goal", "Enjoying a hobby"]
+              },
+              {
+                "question": "How do you typically celebrate a happy moment?",
+                "answers": ["Sharing it with others", "Enjoying it alone", "Documenting the moment"]
               }
-            },
-            {
-              "question": "Feeling down, depressed, or hopeless",
-              "responses": {
-                "Not at all": 0,
-                "Several days": 1,
-                "More than half the days": 2,
-                "Nearly every day": 3
+            ]
+          },
+          "sadness": {
+            "questions": [
+              {
+                "question": "What tends to make you feel sad?",
+                "answers": ["Loss of a loved one", "A missed opportunity", "Watching a sad movie"]
+              },
+              {
+                "question": "How do you usually cope with sadness?",
+                "answers": ["Talking to someone", "Distracting yourself", "Allowing yourself to feel it"]
               }
-            },
-            {
-              "question": "Trouble falling asleep, staying asleep, or sleeping too much",
-              "responses": {
-                "Not at all": 0,
-                "Several days": 1,
-                "More than half the days": 2,
-                "Nearly every day": 3
+            ]
+          },
+          "disgust": {
+            "questions": [
+              {
+                "question": "What is something you find revolting?",
+                "answers": ["Certain foods", "Unhygienic environments", "Unethical behaviors"]
+              },
+              {
+                "question": "How do you react when you feel disgusted?",
+                "answers": ["Avoid the situation", "Express disapproval", "Try to tolerate it"]
               }
-            },
-            {
-              "question": "Feeling tired or having little energy",
-              "responses": {
-                "Not at all": 0,
-                "Several days": 1,
-                "More than half the days": 2,
-                "Nearly every day": 3
+            ]
+          },
+          "fear": {
+            "questions": [
+              {
+                "question": "What typically makes you feel afraid?",
+                "answers": ["A dangerous situation", "Uncertainty about the future", "A past traumatic experience"]
+              },
+              {
+                "question": "How do you usually respond to fear?",
+                "answers": ["Freeze in the moment", "Take immediate action", "Seek comfort or help"]
               }
-            },
-            {
-              "question": "Poor appetite or overeating",
-              "responses": {
-                "Not at all": 0,
-                "Several days": 1,
-                "More than half the days": 2,
-                "Nearly every day": 3
+            ]
+          },
+          "anger": {
+            "questions": [
+              {
+                "question": "What triggers anger for you?",
+                "answers": ["Injustice", "Being disrespected", "Being misunderstood"]
+              },
+              {
+                "question": "How do you usually deal with anger?",
+                "answers": ["Express it openly", "Suppress it", "Channel it into productive action"]
               }
-            },
-            {
-              "question": "Feeling bad about yourself - or that you’re a failure or have let yourself or your family down",
-              "responses": {
-                "Not at all": 0,
-                "Several days": 1,
-                "More than half the days": 2,
-                "Nearly every day": 3
+            ]
+          },
+          "surprise": {
+            "questions": [
+              {
+                "question": "What is something that has recently surprised you?",
+                "answers": ["A sudden good news", "An unexpected challenge", "A surprising discovery"]
+              },
+              {
+                "question": "How do you react when surprised?",
+                "answers": ["Laugh or smile", "Feel shocked and silent", "Quickly adapt to the situation"]
               }
-            },
-            {
-              "question": "Trouble concentrating on things, such as reading the newspaper or watching television",
-              "responses": {
-                "Not at all": 0,
-                "Several days": 1,
-                "More than half the days": 2,
-                "Nearly every day": 3
-              }
-            },
-            {
-              "question": "Moving or speaking so slowly that other people could have noticed. Or, the opposite - being so fidgety or restless that you have been moving around a lot more than usual",
-              "responses": {
-                "Not at all": 0,
-                "Several days": 1,
-                "More than half the days": 2,
-                "Nearly every day": 3
-              }
-            },
-            {
-              "question": "Thoughts that you would be better off dead or of hurting yourself in some way",
-              "responses": {
-                "Not at all": 0,
-                "Several days": 1,
-                "More than half the days": 2,
-                "Nearly every day": 3
-              }
-            }
-          ]
-        },
-        "EKMAN-EMOTIONS": {
-          "question": {
-            "Please rate the following" : [-100, 100]
+            ]
           }
         }
+      ]
+    }
   }
+  

@@ -14,6 +14,6 @@ h1 {
 }
 
 h2 {
-  @apply text-4xl; /* Style your h2 tags */
+  @apply text-3xl; /* Style your h2 tags */
 }
 

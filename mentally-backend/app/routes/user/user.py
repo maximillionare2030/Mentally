@@ -62,7 +62,7 @@ async def create_account(user_data: SignUpSchema):
         doc_ref = db.collection("users").document(user_schema.user_id)
         doc_ref.set(user_dict)  # Store the dictionary in Firestore
 
-        return JSONResponse(content={"message": f"User account created successfully for user {user.uid}"},
+        return JSONResponse(content={"message": f"User account created successfully"},
                             status_code=202)
 
     except auth.EmailAlreadyExistsError:
@@ -109,3 +109,9 @@ async def validate_token(request: Request):
     user = auth.verify_id_token(jwt)
 
     return user['uid']
+
+
+@router.post('/user/update-mental-data')
+async def update_mental_data(user_id : str, data : MentalHealthData):
+    
+    return
