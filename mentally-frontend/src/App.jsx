@@ -1,8 +1,11 @@
 import React from "react";
 import {Routes, Route} from "react-router-dom";
-import Home from "./pages/Home";
+import Landing from "./pages/Landing";
 import NotFound from "./pages/NotFound";
 import StarterTest from "./pages/StarterTest"
+import SignUpForm from "./pages/SignUp";
+import LogInForm from "./pages/LogIn";
+import Account from "./pages/Account";
 
 
 const App = () => {
@@ -14,8 +17,11 @@ const App = () => {
             </header>*/}
             <main>
                 <Routes>
-                    <Route path="/" element={<Home/>}/>
+                    <Route path="/" element={<Landing/>}/>
                     <Route path="/starter-test" element={<StarterTest/>}/>
+                    <Route path="/signup" element={<SignUpForm/>}/>
+                    <Route path="/login" element={<LogInForm/>}/>
+                    <Route path="/account" element={<Account/>}/>
                     <Route path="*" element={<NotFound/>}/>
                 </Routes>   
             </main>

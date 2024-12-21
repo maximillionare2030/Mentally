@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
+import jwt
 
 if not firebase_admin._apps:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -95,7 +96,9 @@ async def create_access_token(user_data: LoginSchema):
         # Update the JWT in Firestore
         user_ref.update({"currentJWT": token})
 
-        return JSONResponse(content={"token": token}, status_code=200)
+        return JSONResponse(content={
+                                        "message": "Log in Successful",
+                                        "token": token}, status_code=200)
     
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid credentials")
@@ -110,8 +113,89 @@ async def validate_token(request: Request):
 
     return user['uid']
 
+@router.post('/get_user_data')
+async def get_user_data(request: Request):
+    headers = request.headers
+    jwt = headers.get('Authorization')
+
+    if not jwt:
+        raise HTTPException(status_code=400, detail="Token not provided")
+
+    try:
+        # Verify the token
+        user = auth.verify_id_token(jwt)
+        uid = user['uid']
+
+        # Fetch the user data from Firestore
+        user_data_ref = db.collection("users").document(uid)
+        user_data = user_data_ref.get()
+
+        if not user_data.exists:
+            raise HTTPException(status_code=404, detail="User data not found")
+
+        return user_data.to_dict()  # Return the user data as a dictionary
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Invalid credentials: {str(e)}")
 
 @router.post('/user/update-mental-data')
-async def update_mental_data(user_id : str, data : MentalHealthData):
+async def update_mental_data(request: Request, data: MentalHealthData):
+    # Get the JWT token from the Authorization header
+    auth_header = request.headers.get('Authorization')
+    if not auth_header:
+        raise HTTPException(status_code=400, detail="Authorization header is missing")
+    
+    # Extract the token from the header (e.g. "Bearer <token>")
+    token = auth_header.split(" ")[1]  # Assuming "Bearer <token>"
+    
+    # Get user_id from the token
+    user_id = get_user_id_from_jwt(token)
+    
+    # Get the user document reference from Firestore
     user_ref = db.collection("users").document(user_id)
-    return
+    user_doc = user_ref.get()
+    
+    if not user_doc.exists:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Update the mental health data
+    user_ref.update({
+        "mental_health_data": {
+            "surprise": data.surprise,
+            "disgust": data.disgust,
+            "happiness": data.happiness,
+            "PHQ_score": data.PHQ_score,
+            "anger": data.anger,
+            "sadness": data.sadness,
+            "fear": data.fear,
+        }
+    })
+    
+    return {"message": "Mental health data updated successfully"}
+
+
+# Helper function to extract user_id from JWT
+def get_user_id_from_request(request: Request):
+    try:
+        # Extract the token from the Authorization header (e.g., "Bearer <token>")
+        auth_header = request.headers.get('Authorization')
+        if not auth_header:
+            raise HTTPException(status_code=400, detail="Authorization header is missing")
+        
+        # Extract the token (Assuming the header format is "Bearer <token>")
+        token = auth_header.split(" ")[1]
+        
+        # Decode the JWT
+        payload = jwt.decode(token, options={"verify_signature": False})  # You can verify the signature if you have the secret
+        user_id = payload.get("user_id")
+        
+        if not user_id:
+            raise HTTPException(status_code=400, detail="Invalid JWT, no user_id found")
+        
+        return user_id
+    
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="JWT has expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid JWT token")
+    except IndexError:
+        raise HTTPException(status_code=400, detail="Token format is invalid")

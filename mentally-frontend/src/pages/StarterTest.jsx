@@ -11,30 +11,10 @@ const StarterTest = () => {
     const [scorePHQ, setScorePHQ] = useState(0);
     const [fade, setFade] = useState(false);
 
-    // User data hooks
-    const [nickname, setNickname] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [signUpStatus, setSignUpStatus] = useState('');
-
     // Initialize the navigate function
     const navigate = useNavigate();
 
-    const handleSignUp = async (e) => {
-        e.preventDefault();
-        console.log('SignUp working');
-        try {
-            const message = await signUp(nickname, email, password);
-            setSignUpStatus(message);
 
-            // After successful signup, navigate to /account page
-            if (message === "Successfully signed up") {
-                navigate("/account");  // Redirect to /account
-            }
-        } catch (error) {
-            setSignUpStatus("Error signing up: " + error.message);
-        }
-    };
 
     const handleResponseSelect = (index) => {
         setSelectedIndex(index);  // Update the selected index when a response is selected
@@ -92,7 +72,10 @@ const StarterTest = () => {
                     </>
                 )}
                 {testComplete && (
-                    <div className="flex flex-col items-center justify-center mt-8">
+                    <div 
+                        className={"flex flex-col items-center justify-center mt-8 transition-opacity duration-2000 ${fade ? 'opacity-0' : 'opacity-100'}"}
+                        
+                        >
                         <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
                             Sign Up to Get Your Score!
                         </h2>
@@ -100,39 +83,21 @@ const StarterTest = () => {
                             Join us today to gain insights, track your progress, and improve your well-being.
                         </p>
                         <div className="w-full max-w-md">
-                            <form className="space-y-4">
-                                <input
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                               <input
-                                    type="text"
-                                    placeholder="Enter a nickname"
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                                    onChange={(e) => setNickname(e.target.value)}
-                                />
-                                <input
-                                    type="password"
-                                    placeholder="Create a password"
-                                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                                    onChange={(e) => setPassword(e.target.value)}
-                                />
-                                <p className='text-xs text-center'>{signUpStatus}</p>
+                            <a href="/signup">
                                 <button
                                     type="submit"
                                     className="w-full py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors"
-                                    onClick={handleSignUp}
+                                    
                                 >
-                                    Sign Up
+                                    
+                                    Join Us Today!
                                 </button>
-                            </form>
+                                </a>
                         </div>
                         <p className="text-gray-600 text-sm mt-4">
                             Already have an account?{" "}
                             <a 
-                            href="#" 
+                            href="/login" 
                             className="text-blue-500 hover:underline"
                             >
                                 Log in

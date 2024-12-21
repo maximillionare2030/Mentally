@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import MCQ from "../components/mcq.jsx";
 import { sleep, typeText } from "../utils/util.js";
 
-const Home = () => {
+const Landing = () => {
   const [message, setMessage] = useState("");
   const [MCQ_prompt, setMCQ] = useState(false);
   const welcomeRef = useRef(null);
@@ -108,4 +108,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Landing;
