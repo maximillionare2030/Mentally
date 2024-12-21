@@ -113,5 +113,5 @@ async def validate_token(request: Request):
 
 @router.post('/user/update-mental-data')
 async def update_mental_data(user_id : str, data : MentalHealthData):
-    
+    user_ref = db.collection("users").document(user_id)
     return
