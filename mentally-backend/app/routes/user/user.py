@@ -137,65 +137,37 @@ async def get_user_data(request: Request):
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Invalid credentials: {str(e)}")
 
-@router.post('/user/update-mental-data')
+@router.post('/update-mental-data')
 async def update_mental_data(request: Request, data: MentalHealthData):
-    # Get the JWT token from the Authorization header
-    auth_header = request.headers.get('Authorization')
-    if not auth_header:
-        raise HTTPException(status_code=400, detail="Authorization header is missing")
-    
-    # Extract the token from the header (e.g. "Bearer <token>")
-    token = auth_header.split(" ")[1]  # Assuming "Bearer <token>"
-    
-    # Get user_id from the token
-    user_id = get_user_id_from_jwt(token)
-    
-    # Get the user document reference from Firestore
-    user_ref = db.collection("users").document(user_id)
-    user_doc = user_ref.get()
-    
-    if not user_doc.exists:
-        raise HTTPException(status_code=404, detail="User not found")
-    
-    # Update the mental health data
-    user_ref.update({
-        "mental_health_data": {
-            "surprise": data.surprise,
-            "disgust": data.disgust,
-            "happiness": data.happiness,
-            "PHQ_score": data.PHQ_score,
-            "anger": data.anger,
-            "sadness": data.sadness,
-            "fear": data.fear,
-        }
-    })
-    
-    return {"message": "Mental health data updated successfully"}
+    headers = request.headers
+    jwt = headers.get('Authorization')
 
-
-# Helper function to extract user_id from JWT
-def get_user_id_from_request(request: Request):
+    if not jwt:
+        raise HTTPException(status_code=400, detail="Token not provided")
+    
     try:
-        # Extract the token from the Authorization header (e.g., "Bearer <token>")
-        auth_header = request.headers.get('Authorization')
-        if not auth_header:
-            raise HTTPException(status_code=400, detail="Authorization header is missing")
-        
-        # Extract the token (Assuming the header format is "Bearer <token>")
-        token = auth_header.split(" ")[1]
-        
-        # Decode the JWT
-        payload = jwt.decode(token, options={"verify_signature": False})  # You can verify the signature if you have the secret
-        user_id = payload.get("user_id")
-        
-        if not user_id:
-            raise HTTPException(status_code=400, detail="Invalid JWT, no user_id found")
-        
-        return user_id
-    
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="JWT has expired")
-    except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid JWT token")
-    except IndexError:
-        raise HTTPException(status_code=400, detail="Token format is invalid")
+        # Verify the token
+        user = auth.verify_id_token(jwt)
+        uid = user['uid']
+
+        # Get the existing mental_health_data
+        user_data_ref = db.collection("users").document(uid)
+        user_doc = user_data_ref.get()
+
+        if user_doc.exists:
+            current_data = user_doc.to_dict().get('mental_health_data', {})
+
+            # Update the existing data with the new fields provided (excluding unset fields)
+            updated_data = {**current_data, **data.dict(exclude_unset=True)}
+
+            # Save the merged data back to Firestore
+            user_data_ref.update({"mental_health_data": updated_data})
+        else:
+            raise HTTPException(status_code=404, detail="User not found")
+
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Invalid credentials: {str(e)}")
+
+    return "Successfully updated data"
+
+

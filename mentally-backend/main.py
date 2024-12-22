@@ -42,4 +42,4 @@ if __name__ == "__main__":
     uvicorn.run("main:app", reload=True)
 
 
-# Run command: .\venv\Scripts\Activate.ps1, pytho main.py
+# Run command: .\venv\Scripts\Activate.ps1, pytho main.py2

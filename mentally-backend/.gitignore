@@ -1,3 +1,3 @@
 venv/
 .env
-app\routes\user\serviceAccount.json
+mentally-backend/app/routes/user/serviceAccount.json

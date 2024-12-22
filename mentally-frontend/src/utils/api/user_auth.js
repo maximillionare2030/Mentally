@@ -54,6 +54,8 @@ export const userPing = async (token) => {
     }
 };
 
+
+
 export const getUserData = async (token) => {
     try {
         const response = await api.post("/user/get_user_data", {}, {
@@ -62,10 +64,84 @@ export const getUserData = async (token) => {
             }
         });
 
-        console.log('User data:', response.data); // Ensure the correct response is logged
         return response.data;
     } catch (err) {
         console.error('Error getting user data:', err.response?.data || err.message);
         return false;
     }
 }
+
+export const updateUserData = async (token, PHQ=null, anger=undefined, disgust=undefined, fear=undefined, happiness=undefined, sadness=undefined, surprise=undefined) => {
+    try {
+        // Prepare an object with only non-null/undefined fields
+        const userData = {};
+
+        if (PHQ !== undefined) userData.PHQ = PHQ;
+        if (anger !== undefined) userData.anger = anger;
+        if (disgust !== undefined) userData.disgust = disgust;
+        if (fear !== undefined) userData.fear = fear;
+        if (happiness !== undefined) userData.happiness = happiness;
+        if (sadness !== undefined) userData.sadness = sadness;
+        if (surprise !== undefined) userData.surprise = surprise;
+
+        // Check if there's any data to send
+        if (Object.keys(userData).length === 0) {
+            throw new Error("No data to update.");
+        }
+
+        // Define the request headers
+        const headers = {
+            "Authorization": token,
+        };
+
+        console.log(userData);
+        // Make the API call to update user data
+        const response = await api.post("/user/update-mental-data", userData, { headers });
+
+        // Check if the response was successful
+        if (response.status === 200) {
+            console.log("Data updated successfully:", response.data);
+        } else {
+            throw new Error("Failed to update data.");
+        }
+    } catch (error) {
+        console.error("Error updating user data:", error);
+    }
+};
+
+
+
+/**
+ * @router.post('/update-mental-data')
+async def update_mental_data(request: Request, data: MentalHealthData):
+    headers = request.headers
+    jwt = headers.get('Authorization')
+
+    if not jwt:
+        raise HTTPException(status_code=400, detail="Token not provided")
+    
+    try:
+        # Verify the token
+        user = auth.verify_id_token(jwt)
+        uid = user['uid']
+
+        # Get the existing mental_health_data
+        user_data_ref = db.collection("users").document(uid)
+        user_doc = user_data_ref.get()
+
+        if user_doc.exists:
+            current_data = user_doc.to_dict().get('mental_health_data', {})
+
+            # Update the existing data with the new fields provided (excluding unset fields)
+            updated_data = {**current_data, **data.dict(exclude_unset=True)}
+
+            # Save the merged data back to Firestore
+            user_data_ref.update({"mental_health_data": updated_data})
+        else:
+            raise HTTPException(status_code=404, detail="User not found")
+
+    except Exception as e:
+        raise HTTPException(status_code=401, detail=f"Invalid credentials: {str(e)}")
+
+    return "Successfully updated data"
+*/

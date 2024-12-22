@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MCQ from "../components/mcq.jsx";
 import data from "../utils/mental-health-tests.json";
 import { signUp} from "../utils/api/user_auth.js";
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { useNavigate, Link } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
 const StarterTest = () => {
     const [questionIndex, setQuestionIndex] = useState(0);
@@ -83,7 +83,9 @@ const StarterTest = () => {
                             Join us today to gain insights, track your progress, and improve your well-being.
                         </p>
                         <div className="w-full max-w-md">
-                            <a href="/signup">
+                            <Link 
+                                to={`/signup?PHQ_score=${scorePHQ}`} // Passing PHQ_score as a query parameter
+                            >
                                 <button
                                     type="submit"
                                     className="w-full py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors"
@@ -92,7 +94,7 @@ const StarterTest = () => {
                                     
                                     Join Us Today!
                                 </button>
-                                </a>
+                                </Link>
                         </div>
                         <p className="text-gray-600 text-sm mt-4">
                             Already have an account?{" "}
