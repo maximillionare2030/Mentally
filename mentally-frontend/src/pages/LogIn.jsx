@@ -17,11 +17,11 @@ const LogInForm = () => {
     const handleLogIn = async (e) => {
         e.preventDefault();
         try {
+            console.log("Attempting to sign in...")
             const response = await logIn(email, password);
-    
-            // Extract message or set a default message
-            const message = response.message || "Unknown error";
-            setSignUpStatus(message);
+            // Ensure response.message is a string before setting it to state
+            console.log("API response: " + response)
+            setSignUpStatus(response.message);
     
             if (response.token) {
                 const userData = await getUserData(response.token);
@@ -32,7 +32,6 @@ const LogInForm = () => {
             setSignUpStatus("Error logging in: " + error.message);
         }
     };
-    
 
     // Check if the inputs are valid and disable the button accordingly
     const [isFormValid, setIsFormValid] = useState(false); // Track form validity

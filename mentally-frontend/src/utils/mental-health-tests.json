@@ -85,83 +85,128 @@
       }
     ]
   },
-    "EKMAN-EMOTIONS": {
-      "items": [
-        {
-          "happiness": {
-            "questions": [
-              {
-                "question": "What makes you feel most joyful?",
-                "answers": ["Spending time with loved ones", "Achieving a personal goal", "Enjoying a hobby"]
-              },
-              {
-                "question": "How do you typically celebrate a happy moment?",
-                "answers": ["Sharing it with others", "Enjoying it alone", "Documenting the moment"]
-              }
-            ]
+  "EKMAN-EMOTIONS": {
+    "items": {
+      "happiness": {
+        "questions": [
+          {
+            "question": "What makes you feel most joyful?",
+            "answers": {
+              "Spending time with loved ones": 50,
+              "Achieving a personal goal": 40,
+              "Enjoying a hobby": 30
+            }
           },
-          "sadness": {
-            "questions": [
-              {
-                "question": "What tends to make you feel sad?",
-                "answers": ["Loss of a loved one", "A missed opportunity", "Watching a sad movie"]
-              },
-              {
-                "question": "How do you usually cope with sadness?",
-                "answers": ["Talking to someone", "Distracting yourself", "Allowing yourself to feel it"]
-              }
-            ]
-          },
-          "disgust": {
-            "questions": [
-              {
-                "question": "What is something you find revolting?",
-                "answers": ["Certain foods", "Unhygienic environments", "Unethical behaviors"]
-              },
-              {
-                "question": "How do you react when you feel disgusted?",
-                "answers": ["Avoid the situation", "Express disapproval", "Try to tolerate it"]
-              }
-            ]
-          },
-          "fear": {
-            "questions": [
-              {
-                "question": "What typically makes you feel afraid?",
-                "answers": ["A dangerous situation", "Uncertainty about the future", "A past traumatic experience"]
-              },
-              {
-                "question": "How do you usually respond to fear?",
-                "answers": ["Freeze in the moment", "Take immediate action", "Seek comfort or help"]
-              }
-            ]
-          },
-          "anger": {
-            "questions": [
-              {
-                "question": "What triggers anger for you?",
-                "answers": ["Injustice", "Being disrespected", "Being misunderstood"]
-              },
-              {
-                "question": "How do you usually deal with anger?",
-                "answers": ["Express it openly", "Suppress it", "Channel it into productive action"]
-              }
-            ]
-          },
-          "surprise": {
-            "questions": [
-              {
-                "question": "What is something that has recently surprised you?",
-                "answers": ["A sudden good news", "An unexpected challenge", "A surprising discovery"]
-              },
-              {
-                "question": "How do you react when surprised?",
-                "answers": ["Laugh or smile", "Feel shocked and silent", "Quickly adapt to the situation"]
-              }
-            ]
+          {
+            "question": "How do you typically celebrate a happy moment?",
+            "answers": {
+              "Sharing it with others": 50,
+              "Enjoying it alone": 40,
+              "Documenting the moment": 30
+            }
           }
-        }
-      ]
+        ]
+      },
+      "sadness": {
+        "questions": [
+          {
+            "question": "What tends to make you feel sad?",
+            "answers": {
+              "Loss of a loved one": -80,
+              "A missed opportunity": -60,
+              "Watching a sad movie": -40
+            }
+          },
+          {
+            "question": "How do you usually cope with sadness?",
+            "answers": {
+              "Talking to someone": 50,
+              "Distracting yourself": 30,
+              "Allowing yourself to feel it": 20
+            }
+          }
+        ]
+      },
+      "disgust": {
+        "questions": [
+          {
+            "question": "What is something you find revolting?",
+            "answers": {
+              "Certain foods": -30,
+              "Unhygienic environments": -50,
+              "Unethical behaviors": -70
+            }
+          },
+          {
+            "question": "How do you react when you feel disgusted?",
+            "answers": {
+              "Avoid the situation": 50,
+              "Express disapproval": 30,
+              "Try to tolerate it": 10
+            }
+          }
+        ]
+      },
+      "fear": {
+        "questions": [
+          {
+            "question": "What typically makes you feel afraid?",
+            "answers": {
+              "A dangerous situation": -70,
+              "Uncertainty about the future": -50,
+              "A past traumatic experience": -90
+            }
+          },
+          {
+            "question": "How do you usually respond to fear?",
+            "answers": {
+              "Freeze in the moment": -60,
+              "Take immediate action": 50,
+              "Seek comfort or help": 30
+            }
+          }
+        ]
+      },
+      "anger": {
+        "questions": [
+          {
+            "question": "What triggers anger for you?",
+            "answers": {
+              "Injustice": -70,
+              "Being disrespected": -50,
+              "Being misunderstood": -30
+            }
+          },
+          {
+            "question": "How do you usually deal with anger?",
+            "answers": {
+              "Express it openly": 50,
+              "Suppress it": -30,
+              "Channel it into productive action": 20
+            }
+          }
+        ]
+      },
+      "surprise": {
+        "questions": [
+          {
+            "question": "What is something that has recently surprised you?",
+            "answers": {
+              "A sudden good news": 70,
+              "An unexpected challenge": 50,
+              "A surprising discovery": 60
+            }
+          },
+          {
+            "question": "How do you react when surprised?",
+            "answers": {
+              "Laugh or smile": 50,
+              "Feel shocked and silent": 20,
+              "Quickly adapt to the situation": 40
+            }
+          }
+        ]
+      }
     }
   }
-  
+}

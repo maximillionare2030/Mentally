@@ -9,20 +9,23 @@ export const signUp = async (nickname, email, password) => {
     try {
         const userData = {
             "email": email,
-            "nickname": nickname, // corrected from email to nickname
+            "nickname": nickname,
             "password": password,
         };
 
-        // Sending POST request to the API
+        console.log("Sending sign-up request with data:", userData);
+
         const response = await api.post("/user/signup", userData);
 
-        // If successful, return the response message
-        return response.data.message
-    } catch (error) {
-        console.error('Error signing up:', error.response?.data || error.message);
+        console.log("Sign-up successful. Response data:", response.data);
 
-        // Access the "detail" field and return it
-        return error.response?.data?.detail || error.message;  // Return the "detail" message if available
+        return response.data;
+    } catch (error) {
+        console.error("Error occurred during sign-up.");
+        console.error("Response data:", error.response?.data || "No response data");
+        console.error("Error message:", error.message);
+
+        return error.response?.data?.detail || error.message;
     }
 };
 
@@ -30,51 +33,70 @@ export const logIn = async (email, password) => {
     const userData = {
         "email": email,
         "password": password
-      }
+    };
 
-      try {
+    try {
+        console.log("Attempting to log in with data:", userData);
+
         const response = await api.post("/user/login", userData);
 
-        return response.data.token;
-      } catch (error) {
-        console.error('Error logging in:', error.response?.data || error.message);
-        return error.response?.data?.detail || error.message;  // Return the "detail" message if available
-      }
+        console.log("Log-in successful. Response data:", response.data);
 
+        return response.data;
+    } catch (error) {
+        console.error("Error occurred during log-in.");
+        console.error("Response data:", error.response?.data || "No response data");
+        console.error("Error message:", error.message);
+
+        return error.response?.data?.detail || error.message;
+    }
 };
 
 export const userPing = async (token) => {
     try {
+        console.log("Pinging user with token:", token);
+
         const response = await api.post("/user/ping", token);
+
+        console.log("Ping successful. Response data:", response.data);
 
         return response.data;
     } catch (err) {
-        console.error('Error pinging:', err.response?.data || err.message);
+        console.error("Error occurred during user ping.");
+        console.error("Response data:", err.response?.data || "No response data");
+        console.error("Error message:", err.message);
+
         return false;
     }
 };
 
-
-
 export const getUserData = async (token) => {
     try {
+        console.log("Fetching user data with token:", token);
+
         const response = await api.post("/user/get_user_data", {}, {
             headers: {
                 'Authorization': token
             }
         });
 
+        console.log("User data fetched successfully. Response data:", response.data);
+
         return response.data;
     } catch (err) {
-        console.error('Error getting user data:', err.response?.data || err.message);
+        console.error("Error occurred while fetching user data.");
+        console.error("Response data:", err.response?.data || "No response data");
+        console.error("Error message:", err.message);
+
         return false;
     }
-}
-
+};
 
 export const updateUserData = async (token, mentalHealthData) => {
     try {
-        // Prepare the request data
+        console.log("Preparing to update mental health data with token:", token);
+        console.log("Initial mental health data:", mentalHealthData);
+
         const requestData = {
             happiness: mentalHealthData.happiness,
             sadness: mentalHealthData.sadness,
@@ -85,63 +107,33 @@ export const updateUserData = async (token, mentalHealthData) => {
             PHQ_score: mentalHealthData.PHQ_score
         };
 
-        // Remove undefined fields
-        Object.keys(requestData).forEach(key => 
+        Object.keys(requestData).forEach(key =>
             requestData[key] === undefined && delete requestData[key]
         );
 
-        // Define the request headers
+        console.log("Processed mental health data for update:", requestData);
+
         const headers = {
             "Authorization": token,
             "Content-Type": "application/json"
         };
 
-        // Make the API call to update mental health data
+        console.log("Sending update request with headers:", headers);
+
         const response = await api.post(
             `/user/update-mental-data`,
             requestData,
             { headers }
         );
 
-        // Check if the response was successful
-        if (response.status === 200) {
-            console.log("Mental health data updated successfully:", response.data);
-            return response.data;
-        } else {
-            throw new Error("Failed to update mental health data.");
-        }
+        console.log("Mental health data updated successfully. Response data:", response.data);
+
+        return response.data;
     } catch (error) {
-        console.error("Error updating mental health data:", error);
+        console.error("Error occurred while updating mental health data.");
+        console.error("Response data:", error.response?.data || "No response data");
+        console.error("Error message:", error.message);
+
         throw error;
     }
 };
-
-
-/**
- * 
- * Example call
- *     const handleUpdateData = async () => {
-         const token = JSON.parse(localStorage.getItem('userData'))?.currentJWT;
- 
-         const mentalHealthData = {
-             happiness: 8,
-             sadness: 2,
-             fear: 3,
-             anger: 1,
-             surprise: 5,
-             disgust: 0,
-             PHQ_score: 69999,
-         };
-     
-         try {
-             const result = await updateUserData(token, mentalHealthData);
-             console.log('Updated mental health data:', result);
-             // Handle success (e.g., display a success message)
-         } catch (error) {
-             console.error('Failed to update mental health data:', error);
-             // Handle error (e.g., display an error message)
-         }
-     };
- 
-     handleUpdateData()
- */

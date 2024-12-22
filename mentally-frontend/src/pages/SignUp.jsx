@@ -23,67 +23,54 @@ const SignUpForm = () => {
         setIsFormValid(isValid);
     }, [email, nickname, password]);
 
-
-    /**    const handleUpdateData = async () => {
-            const token = JSON.parse(localStorage.getItem('userData'))?.currentJWT;
-    
-            const mentalHealthData = {
-                happiness: 8,
-                sadness: 2,
-                fear: 3,
-                anger: 1,
-                surprise: 5,
-                disgust: 0,
-                PHQ_score: 69999,
-            };
-        
-            try {
-                const result = await updateUserData(token, mentalHealthData);
-                console.log('Updated mental health data:', result);
-                // Handle success (e.g., display a success message)
-            } catch (error) {
-                console.error('Failed to update mental health data:', error);
-                // Handle error (e.g., display an error message)
-            }
-        };
-    
-        handleUpdateData() */
     const handleSignUp = async (e) => {
         e.preventDefault();
-        console.log('SignUp working');
+        console.log('SignUp process started');
+    
         try {
-            // Attempt to sign up the user
-            const message = await signUp(nickname, email, password);
-            setSignUpStatus(message);
+            console.log('Sending sign-up request...');
+            const signUpResponse = await signUp(nickname, email, password);
+            console.log('Sign-up response:', signUpResponse);
     
-            // After successful signup, check if the message indicates success
-            if (message === "User account created successfully") {
-                console.log("Attempting to redirect to account");
+            if (signUpResponse.message === "User account created successfully") {
+                console.log("Sign-up successful, proceeding to log in...");
     
-                // Attempt to log in the user with the provided credentials
-                const token = await logIn(email, password);
+                const logInResponse = await logIn(email, password);
+                console.log('Log-in response:', logInResponse);
     
-                // Update user data with PHQ_score
-                if (PHQ_score) {
-                    const result = await updateUserData(token, { PHQ_score: PHQ_score });
-                    console.log('Updated mental health data:', result);
+                if (!logInResponse?.token) {
+                    throw new Error("Login failed: No token received.");
                 }
     
-                // Fetch user data using the token
-                const userData = await getUserData(token);
+                if (PHQ_score) {
+                    console.log('Updating mental health data with PHQ_score:', PHQ_score);
+                    const updateResponse = await updateUserData(logInResponse.token, { PHQ_score });
+                    console.log('Mental health data updated successfully:', updateResponse);
+                }
     
-                // Save user data to localStorage
+                console.log('Fetching user data...');
+                const userData = await getUserData(logInResponse.token);
+                console.log('User data retrieved:', userData);
+    
                 localStorage.setItem('userData', JSON.stringify(userData));
+                console.log('User data saved to localStorage');
     
-                // Navigate to the /account page and pass the userData as state
                 navigate('/account', { state: { userData } });
+                console.log('Navigation to /account completed');
+            } else if (typeof signUpResponse === "string") {
+                setSignUpStatus(signUpResponse);
+            } else if (typeof signUpResponse === "object" && signUpResponse.message) {
+                setSignUpStatus(signUpResponse.message);
+            } else {
+                setSignUpStatus("An unexpected error occurred during sign-up.");
             }
         } catch (error) {
-            // Handle errors (e.g., from signUp, logIn, or getUserData)
-            setSignUpStatus("Error signing up: " + error.message);
+            console.error('Error during sign-up process:', error);
+            setSignUpStatus(error.message || "Unknown error occurred");
         }
     };
     
+        
     
     return (
         <div className="h-screen bg-gradient-to-b from-mint via-lightBlue to-darkBlue flex items-center justify-center">
