@@ -1,5 +1,6 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, Dict, Any
+from datetime import datetime
 
 class MentalHealthData(BaseModel):
     happiness: Optional[int] = 0
@@ -16,3 +17,11 @@ class UserSchema(BaseModel):
     nickname: str
     currentJWT: str  # You can store the JWT, but consider its expiration
     mental_health_data: MentalHealthData
+
+class SnapShotRequest(BaseModel):
+    timestamp : datetime
+    mental_health_data : MentalHealthData
+
+class UserSnapShots(BaseModel):
+    user_id : str
+    snapshot_doc : Any

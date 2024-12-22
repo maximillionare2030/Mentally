@@ -23,6 +23,31 @@ const SignUpForm = () => {
         setIsFormValid(isValid);
     }, [email, nickname, password]);
 
+
+    /**    const handleUpdateData = async () => {
+            const token = JSON.parse(localStorage.getItem('userData'))?.currentJWT;
+    
+            const mentalHealthData = {
+                happiness: 8,
+                sadness: 2,
+                fear: 3,
+                anger: 1,
+                surprise: 5,
+                disgust: 0,
+                PHQ_score: 69999,
+            };
+        
+            try {
+                const result = await updateUserData(token, mentalHealthData);
+                console.log('Updated mental health data:', result);
+                // Handle success (e.g., display a success message)
+            } catch (error) {
+                console.error('Failed to update mental health data:', error);
+                // Handle error (e.g., display an error message)
+            }
+        };
+    
+        handleUpdateData() */
     const handleSignUp = async (e) => {
         e.preventDefault();
         console.log('SignUp working');
@@ -32,17 +57,19 @@ const SignUpForm = () => {
             setSignUpStatus(message);
     
             // After successful signup, check if the message indicates success
-            if (message == "User account created successfully") {
+            if (message === "User account created successfully") {
                 console.log("Attempting to redirect to account");
     
                 // Attempt to log in the user with the provided credentials
-                const logInMessage = await logIn(email, password);
-                const { token } = logInMessage;  // Assuming logIn returns an object with the token
+                const token = await logIn(email, password);
     
-                // Update user data (ensure PHQ_score is defined)
-                await updateUserData(token, { PHQ: PHQ_score });
+                // Update user data with PHQ_score
+                if (PHQ_score) {
+                    const result = await updateUserData(token, { PHQ_score: PHQ_score });
+                    console.log('Updated mental health data:', result);
+                }
     
-                // Fetch user data using the token (assuming getUserData fetches user data based on token)
+                // Fetch user data using the token
                 const userData = await getUserData(token);
     
                 // Save user data to localStorage
@@ -56,6 +83,7 @@ const SignUpForm = () => {
             setSignUpStatus("Error signing up: " + error.message);
         }
     };
+    
     
     return (
         <div className="h-screen bg-gradient-to-b from-mint via-lightBlue to-darkBlue flex items-center justify-center">

@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getUserData } from "../utils/api/user_auth.js"; // Assuming getUserData is imported from the correct path
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { updateUserData } from '../utils/api/user_auth.js';
+
 
 const Account = () => {
     const [userData, setUserData] = useState(null);
@@ -68,6 +70,8 @@ const Account = () => {
         instructionsSection?.scrollIntoView({ behavior: 'smooth' });
     };
 
+
+
     return (
         <>
         <div className="min-h-screen bg-gradient-to-b from-lavendar via-lightBlue to-mint flex flex-col items-center py-10">
@@ -126,26 +130,39 @@ const Account = () => {
             </div>
 
             {/* Insights Section */}
-            <div className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 bg-white p-6 rounded-lg shadow-lg mt-8 flex justify-center items-center">
+            <div className="flex justify-center mt-8 gap-6 p-4 w-3/4 h-4/5 p-4 bg-white b-2 rounded-lg shadow-lg">
                 <p className="text-lg">Insights will be displayed here.</p>
             </div>
 
             {/* Scroll Button */}
             <button
-                className="mt-8 px-6 py-2 bg-blue-500 text-white rounded-lg"
+                className="mt-8 px-6 py-2 bg-lavendar rounded-lg"
                 onClick={scrollToInstructions}
             >
-                Scroll to Instructions
+                ↓    Instructions ↓
             </button>
 
+
         </div>
-             <div className="min-h-screen bg-gradient-to-b from-mint via-lightBlue to-lavendar flex flex-col items-center py-10">
-                {/* Instructions Section */}
-                <div id="instructions" className="mt-16 p-6 bg-white rounded-lg shadow-lg w-full max-w-3xl mx-auto">
-            <h2 className="text-2xl font-semibold mb-4">How to Use the App</h2>
-            <p>Here you can provide instructions for how to use the app, guiding the user through the features and steps for utilizing the mental health insights.</p>
+        <div className="min-h-screen bg-gradient-to-b from-mint via-lightBlue to-lavendar flex flex-col items-center py-10">
+            {/* Instructions Section */}
+            <div id="instructions" className="mt-16 p-6 bg-white rounded-lg shadow-lg w-full max-w-3xl mx-auto">
+                <h2 className="text-2xl font-semibold mb-4">How to Use Mentally</h2>
+                <p className="mb-4">
+                    Mentally is your companion for tracking and improving mental health. Start by taking <b>daily mental health tests based on PHQ (Patient Health Questionnaire) and other clinical studies and standards.</b> The PHQ-2 provides a quick screening for depression, while the more detailed PHQ-9 assesses severity and helps monitor progress over time. The test is most effective when taken bi-weekly.
+                </p>
+                <p className="mb-4">
+                    Mentally also tracks <b>six key emotions as defined by Paul Ekman</b>: <i>fear, sadness, anger, surprise, happiness, and disgust</i>. These emotions provide valuable insights into your mental state and are used alongside PHQ scores to <b>create a comprehensive mental health profile</b>.
+                </p>
+                <p className="mb-4">
+                    For deeper understanding and tailored advice, <b>Mentally's AI therapist offers personalized insights and recommendations</b>. Whether you're looking to reduce stress, improve emotional resilience, or simply understand yourself better, the app guides you every step of the way.
+                </p>
+                <p className="text-sm italic">
+                    Take charge of your mental health journey with Mentally. Track your emotions, gain valuable insights, and build a happier, healthier future.
+                </p>
             </div>
-            </div>
+        </div>
+
         </>
     );
 };

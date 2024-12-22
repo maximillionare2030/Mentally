@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 
 from app.routes.user.user import router as user_router
+from app.routes.user.snapshots import router as snapshot_router
 
 load_dotenv()  # Load environment variables from .env file
 
@@ -31,6 +32,7 @@ allow_headers=["*"], # Allows all headers
 )
 
 app.include_router(user_router, prefix="/user")
+app.include_router(snapshot_router, prefix="/db")
 
 
 @app.get("/")

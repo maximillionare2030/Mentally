@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { logIn, getUserData } from "../utils/api/user_auth.js";
 import { useNavigate, useLocation } from 'react-router-dom'; 
+
 
 const LogInForm = () => {
 
@@ -17,9 +18,9 @@ const LogInForm = () => {
         e.preventDefault();
         try {
             const response = await logIn(email, password);
-            // Ensure response.message is a string before setting it to state
-            const message = response.message || 'Unknown error';
-
+    
+            // Extract message or set a default message
+            const message = response.message || "Unknown error";
             setSignUpStatus(message);
     
             if (response.token) {
@@ -31,9 +32,17 @@ const LogInForm = () => {
             setSignUpStatus("Error logging in: " + error.message);
         }
     };
+    
 
     // Check if the inputs are valid and disable the button accordingly
-    const isFormValid = email && password && /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+    const [isFormValid, setIsFormValid] = useState(false); // Track form validity
+
+    useEffect(() => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordMinLength = 6;
+        const isValid = emailRegex.test(email) && password.length >= passwordMinLength;
+        setIsFormValid(isValid);
+    }, [email, password]);
 
     return (
         <div className="h-screen bg-gradient-to-b from-mint via-lightBlue to-darkBlue flex items-center justify-center">
@@ -53,14 +62,15 @@ const LogInForm = () => {
                             type="password"
                             placeholder="Create a password"
                             className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                            onChange={(e) => setPassword(e.target.value)}
+                            onChange={(e) => setPassword(e.target.value)} 
                         />
-                        <p>{signUpStatus}</p>
+                        <p // Sign up status
+                            className = "text-center">{signUpStatus}</p>
                         <button
                             type="submit"
-                            className="w-full py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors"
+                            className={`w-full py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors ${!isFormValid ? 'opacity-50 cursor-not-allowed' : ''}`}
                             onClick={handleLogIn}
-                            disabled={!isFormValid} // Disable button if form is not valid
+                            disabled={!isFormValid} // Disable button if form is not valid 
                         >
                             Sign In
                         </button>
@@ -68,7 +78,9 @@ const LogInForm = () => {
                 </div>
                 <p className="text-gray-600 text-sm mt-4">
                     Don't have an account?{" "}
-                    <a href="/signup" className="text-blue-500 hover:underline">
+                    <a 
+                    href="/signup" 
+                    className="text-blue-500 hover:underline">
                         Sign Up
                     </a>
                 </p>
