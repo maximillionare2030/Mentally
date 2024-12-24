@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import MCQ from "../components/mcq.jsx";
 import data from "../utils/mental-health-tests.json";
-import { signUp} from "../utils/api/user_auth.js";
-import { useNavigate, Link } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { signUp } from "../utils/api/user_auth.js";
+import { useNavigate, Link } from 'react-router-dom'; 
 
 const StarterTest = () => {
     const [questionIndex, setQuestionIndex] = useState(0);
@@ -14,11 +14,10 @@ const StarterTest = () => {
     // Initialize the navigate function
     const navigate = useNavigate();
 
-
-
     const handleResponseSelect = (index) => {
         setSelectedIndex(index);  // Update the selected index when a response is selected
     };
+
 
     useEffect(() => {
         if (selectedIndex !== null) {
@@ -32,7 +31,7 @@ const StarterTest = () => {
                         const newIndex = prevIndex + 1;
 
                         // Check if it's the last question
-                        if (newIndex >= data["PHQ-9"]["items"].length) {
+                        if (newIndex >= data["Mental-Health-Tests"]["PHQ-9"]["questions"].length) {
                             setTestComplete(true);
                         }
 
@@ -49,8 +48,8 @@ const StarterTest = () => {
         }
     }, [selectedIndex, scorePHQ]);
 
-    const responsesArray = questionIndex < data["PHQ-9"]["items"].length
-        ? Object.keys(data["PHQ-9"]["items"][questionIndex]["responses"])
+    const responsesArray = questionIndex < data["Mental-Health-Tests"]["PHQ-9"]["questions"].length
+        ? Object.keys(data["Mental-Health-Tests"]["PHQ-9"]["questions"][questionIndex]["responses"])
         : [];
 
     return (
@@ -58,12 +57,14 @@ const StarterTest = () => {
             <div className={`w-1/2 p-8 bg-white rounded-lg shadow-lg`}>
                 {!testComplete && (
                     <>
-                        <h2 className="font-semibold text-dimGrey text-center mb-8 text-gray-700">{data["PHQ-9"]["question"]}</h2>
+                        <h2 className="font-semibold text-dimGrey text-center mb-8 text-gray-700">
+                            {data["Mental-Health-Tests"]["PHQ-9"]?.prompt}
+                        </h2>
                         {responsesArray.length > 0 && (
                             <div>
                                 <MCQ
                                     className={`transition-opacity duration-1000 ${fade ? 'opacity-0' : 'opacity-100'}`}
-                                    question={data["PHQ-9"]["items"][questionIndex]["question"]}
+                                    question={data["Mental-Health-Tests"]["PHQ-9"]["questions"][questionIndex]["question"]}
                                     responses={responsesArray}
                                     onResponseSelect={handleResponseSelect}  // Pass callback to child 
                                 />
@@ -74,8 +75,7 @@ const StarterTest = () => {
                 {testComplete && (
                     <div 
                         className={"flex flex-col items-center justify-center mt-8 transition-opacity duration-2000 ${fade ? 'opacity-0' : 'opacity-100'}"}
-                        
-                        >
+                    >
                         <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
                             Sign Up to Get Your Score!
                         </h2>
@@ -89,18 +89,16 @@ const StarterTest = () => {
                                 <button
                                     type="submit"
                                     className="w-full py-2 bg-blue-500 text-white rounded-lg font-semibold hover:bg-blue-600 transition-colors"
-                                    
                                 >
-                                    
                                     Join Us Today!
                                 </button>
-                                </Link>
+                            </Link>
                         </div>
                         <p className="text-gray-600 text-sm mt-4">
                             Already have an account?{" "}
                             <a 
-                            href="/login" 
-                            className="text-blue-500 hover:underline"
+                                href="/login" 
+                                className="text-blue-500 hover:underline"
                             >
                                 Log in
                             </a>

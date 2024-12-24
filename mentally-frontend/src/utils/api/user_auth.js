@@ -36,8 +36,6 @@ export const logIn = async (email, password) => {
     };
 
     try {
-        console.log("Attempting to log in with data:", userData);
-
         const response = await api.post("/user/login", userData);
 
         console.log("Log-in successful. Response data:", response.data);
@@ -72,8 +70,6 @@ export const userPing = async (token) => {
 
 export const getUserData = async (token) => {
     try {
-        console.log("Fetching user data with token:", token);
-
         const response = await api.post("/user/get_user_data", {}, {
             headers: {
                 'Authorization': token
@@ -87,10 +83,15 @@ export const getUserData = async (token) => {
         console.error("Error occurred while fetching user data.");
         console.error("Response data:", err.response?.data || "No response data");
         console.error("Error message:", err.message);
+        
+        if (err.response?.data?.detail?.includes('Token used too early')) {
+            console.error("Please check your system clock.");
+        }
 
         return false;
     }
 };
+
 
 export const updateUserData = async (token, mentalHealthData) => {
     try {

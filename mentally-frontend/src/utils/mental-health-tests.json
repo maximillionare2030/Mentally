@@ -1,212 +1,218 @@
 {
-  "PHQ-9": {
-    "question": "Over the last 2 weeks, how often have you been bothered by the following problem?",
-    "items": [
-      {
-        "question": "Little interest or pleasure in doing things",
-        "responses": {
-          "Not at all": 0,
-          "Several days": 1,
-          "More than half the days": 2,
-          "Nearly every day": 3
+  "Mental-Health-Tests": {
+    "PHQ-9": {
+      "prompt" : "Over the last 2 weeks, how often have you been bothered by any of the following problems?",
+      "description" : "The Patient Health Questionnaire-9 (PHQ-9) is a brief, self-administered 9-item instrument used for screening, diagnosing, and measuring the severity of depression in primary care and other medical settings. It assesses the nine DSM-5 criteria for major depressive disorder, with each item scored on a 4-point scale, resulting in a total score range of 0-27 that indicates the level of depression severity.",
+      "questions": [
+        {
+          "question": "Little interest or pleasure in doing things",
+          "responses": {
+            "Not at all": 0,
+            "Several days": 1,
+            "More than half the days": 2,
+            "Nearly every day": 3
+          }
+        },
+        {
+          "question": "Feeling down, depressed, or hopeless",
+          "responses": {
+            "Not at all": 0,
+            "Several days": 1,
+            "More than half the days": 2,
+            "Nearly every day": 3
+          }
+        },
+        {
+          "question": "Trouble falling asleep, staying asleep, or sleeping too much",
+          "responses": {
+            "Not at all": 0,
+            "Several days": 1,
+            "More than half the days": 2,
+            "Nearly every day": 3
+          }
+        },
+        {
+          "question": "Feeling tired or having little energy",
+          "responses": {
+            "Not at all": 0,
+            "Several days": 1,
+            "More than half the days": 2,
+            "Nearly every day": 3
+          }
+        },
+        {
+          "question": "Poor appetite or overeating",
+          "responses": {
+            "Not at all": 0,
+            "Several days": 1,
+            "More than half the days": 2,
+            "Nearly every day": 3
+          }
+        },
+        {
+          "question": "Feeling bad about yourself - or that you’re a failure or have let yourself or your family down",
+          "responses": {
+            "Not at all": 0,
+            "Several days": 1,
+            "More than half the days": 2,
+            "Nearly every day": 3
+          }
+        },
+        {
+          "question": "Trouble concentrating on things, such as reading the newspaper or watching television",
+          "responses": {
+            "Not at all": 0,
+            "Several days": 1,
+            "More than half the days": 2,
+            "Nearly every day": 3
+          }
+        },
+        {
+          "question": "Moving or speaking so slowly that other people could have noticed. Or, the opposite - being so fidgety or restless that you have been moving around a lot more than usual",
+          "responses": {
+            "Not at all": 0,
+            "Several days": 1,
+            "More than half the days": 2,
+            "Nearly every day": 3
+          }
+        },
+        {
+          "question": "Thoughts that you would be better off dead or of hurting yourself in some way",
+          "responses": {
+            "Not at all": 0,
+            "Several days": 1,
+            "More than half the days": 2,
+            "Nearly every day": 3
+          }
         }
-      },
-      {
-        "question": "Feeling down, depressed, or hopeless",
-        "responses": {
-          "Not at all": 0,
-          "Several days": 1,
-          "More than half the days": 2,
-          "Nearly every day": 3
-        }
-      },
-      {
-        "question": "Trouble falling asleep, staying asleep, or sleeping too much",
-        "responses": {
-          "Not at all": 0,
-          "Several days": 1,
-          "More than half the days": 2,
-          "Nearly every day": 3
-        }
-      },
-      {
-        "question": "Feeling tired or having little energy",
-        "responses": {
-          "Not at all": 0,
-          "Several days": 1,
-          "More than half the days": 2,
-          "Nearly every day": 3
-        }
-      },
-      {
-        "question": "Poor appetite or overeating",
-        "responses": {
-          "Not at all": 0,
-          "Several days": 1,
-          "More than half the days": 2,
-          "Nearly every day": 3
-        }
-      },
-      {
-        "question": "Feeling bad about yourself - or that you’re a failure or have let yourself or your family down",
-        "responses": {
-          "Not at all": 0,
-          "Several days": 1,
-          "More than half the days": 2,
-          "Nearly every day": 3
-        }
-      },
-      {
-        "question": "Trouble concentrating on things, such as reading the newspaper or watching television",
-        "responses": {
-          "Not at all": 0,
-          "Several days": 1,
-          "More than half the days": 2,
-          "Nearly every day": 3
-        }
-      },
-      {
-        "question": "Moving or speaking so slowly that other people could have noticed. Or, the opposite - being so fidgety or restless that you have been moving around a lot more than usual",
-        "responses": {
-          "Not at all": 0,
-          "Several days": 1,
-          "More than half the days": 2,
-          "Nearly every day": 3
-        }
-      },
-      {
-        "question": "Thoughts that you would be better off dead or of hurting yourself in some way",
-        "responses": {
-          "Not at all": 0,
-          "Several days": 1,
-          "More than half the days": 2,
-          "Nearly every day": 3
-        }
-      }
-    ]
+      ]
+    },
+    "Beckman's Depression Inventory": {
+      "prompt" : "Over the last 2 weeks, how often have you been bothered by any of the following problems?",
+      "description" : "The Beck Depression Inventory (BDI) is a 21-item, self-report questionnaire designed to assess the severity of depressive symptoms in individuals. It measures characteristic attitudes and symptoms of depression, with each item rated on a 4-point scale, resulting in a total score that indicates the level of depression severity.",
+      "questions": []
+    }
   },
   "EKMAN-EMOTIONS": {
-    "items": {
-      "happiness": {
-        "questions": [
-          {
-            "question": "What makes you feel most joyful?",
-            "answers": {
-              "Spending time with loved ones": 50,
-              "Achieving a personal goal": 40,
-              "Enjoying a hobby": 30
-            }
-          },
-          {
-            "question": "How do you typically celebrate a happy moment?",
-            "answers": {
-              "Sharing it with others": 50,
-              "Enjoying it alone": 40,
-              "Documenting the moment": 30
-            }
+    "happiness": {
+      "questions": [
+        {
+          "question": "What makes you feel most joyful?",
+          "responses": {
+            "Spending time with loved ones": 50,
+            "Achieving a personal goal": 40,
+            "Enjoying a hobby": 30
           }
-        ]
-      },
-      "sadness": {
-        "questions": [
-          {
-            "question": "What tends to make you feel sad?",
-            "answers": {
-              "Loss of a loved one": -80,
-              "A missed opportunity": -60,
-              "Watching a sad movie": -40
-            }
-          },
-          {
-            "question": "How do you usually cope with sadness?",
-            "answers": {
-              "Talking to someone": 50,
-              "Distracting yourself": 30,
-              "Allowing yourself to feel it": 20
-            }
+        },
+        {
+          "question": "How do you typically celebrate a happy moment?",
+          "responses": {
+            "Sharing it with others": 50,
+            "Enjoying it alone": 40,
+            "Documenting the moment": 30
           }
-        ]
-      },
-      "disgust": {
-        "questions": [
-          {
-            "question": "What is something you find revolting?",
-            "answers": {
-              "Certain foods": -30,
-              "Unhygienic environments": -50,
-              "Unethical behaviors": -70
-            }
-          },
-          {
-            "question": "How do you react when you feel disgusted?",
-            "answers": {
-              "Avoid the situation": 50,
-              "Express disapproval": 30,
-              "Try to tolerate it": 10
-            }
+        }
+      ]
+    },
+    "sadness": {
+      "questions": [
+        {
+          "question": "What tends to make you feel sad?",
+          "responses": {
+            "Loss of a loved one": -80,
+            "A missed opportunity": -60,
+            "Watching a sad movie": -40
           }
-        ]
-      },
-      "fear": {
-        "questions": [
-          {
-            "question": "What typically makes you feel afraid?",
-            "answers": {
-              "A dangerous situation": -70,
-              "Uncertainty about the future": -50,
-              "A past traumatic experience": -90
-            }
-          },
-          {
-            "question": "How do you usually respond to fear?",
-            "answers": {
-              "Freeze in the moment": -60,
-              "Take immediate action": 50,
-              "Seek comfort or help": 30
-            }
+        },
+        {
+          "question": "How do you usually cope with sadness?",
+          "responses": {
+            "Talking to someone": 50,
+            "Distracting yourself": 30,
+            "Allowing yourself to feel it": 20
           }
-        ]
-      },
-      "anger": {
-        "questions": [
-          {
-            "question": "What triggers anger for you?",
-            "answers": {
-              "Injustice": -70,
-              "Being disrespected": -50,
-              "Being misunderstood": -30
-            }
-          },
-          {
-            "question": "How do you usually deal with anger?",
-            "answers": {
-              "Express it openly": 50,
-              "Suppress it": -30,
-              "Channel it into productive action": 20
-            }
+        }
+      ]
+    },
+    "disgust": {
+      "questions": [
+        {
+          "question": "What is something you find revolting?",
+          "responses": {
+            "Certain foods": -30,
+            "Unhygienic environments": -50,
+            "Unethical behaviors": -70
           }
-        ]
-      },
-      "surprise": {
-        "questions": [
-          {
-            "question": "What is something that has recently surprised you?",
-            "answers": {
-              "A sudden good news": 70,
-              "An unexpected challenge": 50,
-              "A surprising discovery": 60
-            }
-          },
-          {
-            "question": "How do you react when surprised?",
-            "answers": {
-              "Laugh or smile": 50,
-              "Feel shocked and silent": 20,
-              "Quickly adapt to the situation": 40
-            }
+        },
+        {
+          "question": "How do you react when you feel disgusted?",
+          "responses": {
+            "Avoid the situation": 50,
+            "Express disapproval": 30,
+            "Try to tolerate it": 10
           }
-        ]
-      }
+        }
+      ]
+    },
+    "fear": {
+      "questions": [
+        {
+          "question": "What typically makes you feel afraid?",
+          "responses": {
+            "A dangerous situation": -70,
+            "Uncertainty about the future": -50,
+            "A past traumatic experience": -90
+          }
+        },
+        {
+          "question": "How do you usually respond to fear?",
+          "responses": {
+            "Freeze in the moment": -60,
+            "Take immediate action": 50,
+            "Seek comfort or help": 30
+          }
+        }
+      ]
+    },
+    "anger": {
+      "questions": [
+        {
+          "question": "What triggers anger for you?",
+          "responses": {
+            "Injustice": -70,
+            "Being disrespected": -50,
+            "Being misunderstood": -30
+          }
+        },
+        {
+          "question": "How do you usually deal with anger?",
+          "responses": {
+            "Express it openly": 50,
+            "Suppress it": -30,
+            "Channel it into productive action": 20
+          }
+        }
+      ]
+    },
+    "surprise": {
+      "questions": [
+        {
+          "question": "What is something that has recently surprised you?",
+          "responses": {
+            "A sudden good news": 70,
+            "An unexpected challenge": 50,
+            "A surprising discovery": 60
+          }
+        },
+        {
+          "question": "How do you react when surprised?",
+          "responses": {
+            "Laugh or smile": 50,
+            "Feel shocked and silent": 20,
+            "Quickly adapt to the situation": 40
+          }
+        }
+      ]
     }
   }
 }

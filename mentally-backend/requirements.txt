@@ -11,3 +11,4 @@ pytest
 datetime
 typing
 apscheduler
+openai

@@ -8,7 +8,6 @@ const LogInForm = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
-    const PHQ_score = queryParams.get('PHQ_score');
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -20,7 +19,7 @@ const LogInForm = () => {
             console.log("Attempting to sign in...")
             const response = await logIn(email, password);
             // Ensure response.message is a string before setting it to state
-            console.log("API response: " + response)
+            console.log("API response: " + response.token)
             setSignUpStatus(response.message);
     
             if (response.token) {
@@ -29,7 +28,9 @@ const LogInForm = () => {
                 navigate('/account', { state: { userData } });
             }
         } catch (error) {
-            setSignUpStatus("Error logging in: " + error.message);
+            console.log("Login Failed")
+            const response = await logIn(email, password);
+            setSignUpStatus("Error logging in: " + response);
         }
     };
 

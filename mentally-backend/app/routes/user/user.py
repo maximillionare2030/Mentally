@@ -94,7 +94,7 @@ async def validate_token(request: Request):
     return user['uid']
 
 @router.post('/get_user_data')
-async def get_user_data(request: Request):
+def get_user_data(request: Request):
     headers = request.headers
     jwt = headers.get('Authorization')
 
@@ -102,6 +102,7 @@ async def get_user_data(request: Request):
         raise HTTPException(status_code=400, detail="Token not provided")
 
     try:
+
         # Verify the token
         user = auth.verify_id_token(jwt)
         uid = user['uid']
@@ -116,6 +117,7 @@ async def get_user_data(request: Request):
         return user_data.to_dict()  # Return the user data as a dictionary
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Invalid credentials: {str(e)}")
+
 
 @router.post('/update-mental-data')
 async def update_mental_data(request: Request, data: MentalHealthData):

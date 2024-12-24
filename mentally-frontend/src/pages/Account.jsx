@@ -5,8 +5,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { updateUserData } from '../utils/api/user_auth.js';
 
+import { Fragment } from 'react';  // Add this import
+import { Menu, Transition} from '@headlessui/react';
+
+import data from "../utils/mental-health-tests.json";
+
 
 const Account = () => {
+
+    const mentalHealthTests = data['Mental-Health-Tests'];
+    const emotionTests = data['EKMAN-EMOTIONS'];
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,6 +25,7 @@ const Account = () => {
         
         if (storedUserData) {
             const parsedUserData = JSON.parse(storedUserData);
+            console.log(parsedUserData);
             const { currentJWT } = parsedUserData;
             
             try {
@@ -130,13 +139,72 @@ const Account = () => {
             </div>
 
             {/* Insights Section */}
-            <div className="flex justify-center mt-8 gap-6 p-4 w-3/4 h-4/5 p-4 bg-white b-2 rounded-lg shadow-lg">
-                <p className="text-lg">Insights will be displayed here.</p>
+            <div className="flex flex-row justify-center mt-8 gap-6 p-4 w-3/4 min-h-[300px] bg-white border-2 rounded-lg shadow-lg">
+                <div className="w-full min-h-[300px] bg-lightBlue h-full text-center justify-center">
+                    Calendar
+                </div>
+                <div className="w-full min-h-[300px] bg-lightBlue h-full text-center justify-center">
+                    Graph
+                </div>
+                <div className="w-full min-h-[300px] bg-lightBlue h-full text-center justify-center">
+                    Extra
+                </div>
             </div>
+
+            {/* Take Assessments Section */}
+            <div className="flex flex-row justify-center w-full gap-4 mt-8">
+                <Menu as="div" className="relative">
+                <Menu.Button className="bg-clay px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    Take Mental Health Assessments
+                </Menu.Button>
+                <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                >
+                    <Menu.Items className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/4 max-h-screen overflow-y-auto bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div className="p-4">
+                            <h3 className="text-center">Mental Health Tests</h3>
+                            {Object.keys(mentalHealthTests).map((testKey) => (
+                                <Menu.Item key={testKey}>
+                                    {({ active }) => (
+                                        <div className="group">
+                                            <a
+                                                onClick={() => navigate(`/user-tests/`, { state: { testKey } })}
+                                                className={`block px-4 py-2 text-sm ${active ? 'bg-blue-600 text-white' : 'text-gray-900'}`}
+                                            >
+                                                {testKey}
+                                            </a>
+
+                                            {active && <p className="text-xs opacity-0 group-hover:opacity-100 transition-opacity mt-1">
+                                                {mentalHealthTests[testKey]["description"]}
+                                            </p> }
+
+                                        </div>
+                                    )}
+                                </Menu.Item>
+                            ))}
+                            <p className="text-center text-xs mt-8"> <i> Clinically-proven tests that assess different components of your mental health</i>Take</p>
+                        </div>
+                    </Menu.Items>
+                </Transition>
+            </Menu>
+                <button className="bg-mint px-6 py-3 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400">
+                    Evaluate Emotions
+                </button>
+                <button className="bg-lavendar px-6 py-3 rounded-lg shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400">
+                    Get Advanced Insights
+                </button>
+            </div>
+
 
             {/* Scroll Button */}
             <button
-                className="mt-8 px-6 py-2 bg-lavendar rounded-lg"
+                className="mt-8 px-6 py-2 bg-white rounded-lg"
                 onClick={scrollToInstructions}
             >
                 ↓    Instructions ↓
