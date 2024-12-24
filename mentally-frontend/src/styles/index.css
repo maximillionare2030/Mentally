@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles */
+html {
+  @apply font-inter text-black; /* Apply 'Inter' font globally */
+}
+body {
+  @apply bg-clay; /* Use the 'clay' color for the body background */
+}
+h1 {
+  @apply text-6xl; /* Style your h1 tags */
+}
+
+h2 {
+  @apply text-3xl; /* Style your h2 tags */
+}
+

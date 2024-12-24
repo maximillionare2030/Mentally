@@ -1,3 +1,14 @@
 uvicorn
 fastapi
+starlette
 python-dotenv
+pydantic
+firebase
+firebase_admin
+pyrebase4
+requests
+pytest
+datetime
+typing
+apscheduler
+openai
