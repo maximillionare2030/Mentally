@@ -7,6 +7,7 @@ import SignUpForm from "./pages/SignUp";
 import LogInForm from "./pages/LogIn";
 import Account from "./pages/Account";
 import MentalHealthTests from "./pages/MentalHealthTests";
+import ChatBot from "./pages/ChatBot";
 
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
                     <Route path="/login" element={<LogInForm/>}/>
                     <Route path="/account" element={<Account/>}/>
                     <Route path="/user-tests" element={<MentalHealthTests/>}/>
+                    <Route path="/chat-bot" element={<ChatBot/>}/>
                     <Route path="*" element={<NotFound/>}/>
                 </Routes>   
             </main>

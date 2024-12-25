@@ -66,7 +66,7 @@ async def create_snapshots():
 scheduler = BackgroundScheduler()
 
 # Schedule the `create_snapshots` function to run every 24 hours (86400 seconds)
-scheduler.add_job(create_snapshots, 'interval', seconds=86400)
+scheduler.add_job(create_snapshots, 'interval', seconds=15)
 
 # Start the scheduler
 scheduler.start()

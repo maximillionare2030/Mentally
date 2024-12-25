@@ -19,7 +19,6 @@ const LogInForm = () => {
             console.log("Attempting to sign in...")
             const response = await logIn(email, password);
             // Ensure response.message is a string before setting it to state
-            console.log("API response: " + response.token)
             setSignUpStatus(response.message);
     
             if (response.token) {

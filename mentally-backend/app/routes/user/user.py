@@ -69,6 +69,7 @@ async def create_access_token(user_data: LoginSchema):
     try:
         user = firebase.auth().sign_in_with_email_and_password(email=email, password=password)
         token = user['idToken']
+        expires_in = 5 * 24 * 60 * 60  # 5 days in seconds TODO: Implement longer lasting JWT tokens -- fk trying to asynchronously refresh
         
         # Fetch the user by their UID from Firestore
         user_ref = db.collection("users").document(user['localId'])
@@ -79,7 +80,6 @@ async def create_access_token(user_data: LoginSchema):
         return JSONResponse(content={
                                         "message": "Log in Successful",
                                         "token": token}, status_code=200)
-    
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid credentials")
 

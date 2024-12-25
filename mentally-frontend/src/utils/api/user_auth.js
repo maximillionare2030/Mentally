@@ -95,8 +95,7 @@ export const getUserData = async (token) => {
 
 export const updateUserData = async (token, mentalHealthData) => {
     try {
-        console.log("Preparing to update mental health data with token:", token);
-        console.log("Initial mental health data:", mentalHealthData);
+        console.log("New mental health data:", mentalHealthData);
 
         const requestData = {
             happiness: mentalHealthData.happiness,
@@ -105,7 +104,8 @@ export const updateUserData = async (token, mentalHealthData) => {
             anger: mentalHealthData.anger,
             surprise: mentalHealthData.surprise,
             disgust: mentalHealthData.disgust,
-            PHQ_score: mentalHealthData.PHQ_score
+            PHQ_score: mentalHealthData.PHQ_score,
+            BDI_score: mentalHealthData.BDI_score,
         };
 
         Object.keys(requestData).forEach(key =>
@@ -118,8 +118,6 @@ export const updateUserData = async (token, mentalHealthData) => {
             "Authorization": token,
             "Content-Type": "application/json"
         };
-
-        console.log("Sending update request with headers:", headers);
 
         const response = await api.post(
             `/user/update-mental-data`,

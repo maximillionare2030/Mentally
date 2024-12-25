@@ -72,7 +72,7 @@ const Account = () => {
     }
 
     const { email, nickname, mental_health_data } = userData;
-    const { surprise, disgust, happiness, PHQ_score, anger, sadness, fear } = mental_health_data;
+    const { surprise, disgust, happiness, BDI_score, PHQ_score, anger, sadness, fear } = mental_health_data;
 
     const scrollToInstructions = () => {
         const instructionsSection = document.getElementById('instructions');
@@ -101,16 +101,28 @@ const Account = () => {
             {/* Mental Health Data Section */}
             <div className="flex justify-center mt-8 gap-6 px-4 w-full max-w-6xl">
     
-                {/* Left Section: PHQ Score */}
-                <div className="w-full sm:w-1/2 lg:w-1/3 xl:w-1/4 bg-white p-6 rounded-lg shadow-lg transform transition-transform hover:scale-105 relative group">
-                    <h3 className="text-xl font-semibold text-center mb-4">PHQ Score</h3>
-                    <div className="text-center">
-                        <p className="text-2xl">{PHQ_score}</p>
+                {/* Left Section: Mental Health Test Scores */}
+                <div className="w-1/2 flex justify-around gap-4">
+                    <div className="flex-1 max-w-xs bg-white p-6 rounded-lg shadow-lg transform transition-transform hover:scale-105 relative group">
+                        <h3 className="text-xl font-semibold text-center mb-4">PHQ Score</h3>
+                        <div className="text-center">
+                            <p className="text-2xl">{PHQ_score}</p>
+                        </div>
+                        <div className="absolute inset-0 bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 flex justify-center items-center text-black text-lg p-4 transition-opacity">
+                            <p className="text-xs">The PHQ score helps to assess depression severity based on a series of questions.</p>
+                        </div>
                     </div>
-                    <div className="absolute inset-0 bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 flex justify-center items-center text-black text-lg p-4 transition-opacity">
-                        <p className="text-xs">The PHQ score helps to assess depression severity based on a series of questions.</p>
+                    <div className="flex-1 max-w-xs bg-white p-6 rounded-lg shadow-lg transform transition-transform hover:scale-105 relative group">
+                        <h3 className="text-xl font-semibold text-center mb-4">Beckman's Inventory Score</h3>
+                        <div className="text-center">
+                            <p className="text-2xl">{BDI_score}</p>
+                        </div>
+                        <div className="absolute inset-0 bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 flex justify-center items-center text-black text-lg p-4 transition-opacity">
+                            <p className="text-xs">The Beckman score helps to assess depression severity based on a series of questions.</p>
+                        </div>
                     </div>
                 </div>
+
 
                 {/* Right Section: Ekman's Emotions */}
                 <div className="w-full sm:w-1/2 lg:w-2/3 xl:w-3/4 grid grid-cols-2 lg:grid-cols-3 gap-2">
@@ -146,57 +158,61 @@ const Account = () => {
                 <div className="w-full min-h-[300px] bg-lightBlue h-full text-center justify-center">
                     Graph
                 </div>
-                <div className="w-full min-h-[300px] bg-lightBlue h-full text-center justify-center">
-                    Extra
-                </div>
             </div>
 
             {/* Take Assessments Section */}
             <div className="flex flex-row justify-center w-full gap-4 mt-8">
-                <Menu as="div" className="relative">
-                <Menu.Button className="bg-clay px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    Take Mental Health Assessments
-                </Menu.Button>
-                <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                >
-                    <Menu.Items className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/4 max-h-screen overflow-y-auto bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <div className="p-4">
-                            <h3 className="text-center">Mental Health Tests</h3>
-                            {Object.keys(mentalHealthTests).map((testKey) => (
-                                <Menu.Item key={testKey}>
-                                    {({ active }) => (
-                                        <div className="group">
-                                            <a
-                                                onClick={() => navigate(`/user-tests/`, { state: { testKey } })}
-                                                className={`block px-4 py-2 text-sm ${active ? 'bg-blue-600 text-white' : 'text-gray-900'}`}
-                                            >
-                                                {testKey}
-                                            </a>
+             <Menu as="div" className="relative">
+                    <Menu.Button className="bg-clay px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ease-in-out">
+                        Take Mental Health Assessments
+                    </Menu.Button>
 
-                                            {active && <p className="text-xs opacity-0 group-hover:opacity-100 transition-opacity mt-1">
-                                                {mentalHealthTests[testKey]["description"]}
-                                            </p> }
+                    <Transition
+                        as={Fragment}
+                        enter="transition-transform ease-out duration-300"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition-transform ease-in duration-150"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                    >
+                        <Menu.Items className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/4 max-h-screen overflow-y-auto bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div className="p-4">
+                                <h3 className="text-center text-lg font-semibold">Mental Health Tests</h3>
+                                {Object.keys(mentalHealthTests).map((testKey) => (
+                                    <Menu.Item key={testKey}>
+                                        {({ active }) => (
+                                            <div className="group">
+                                                <a
+                                                    onClick={() => navigate(`/user-tests/`, { state: { testKey } })}
+                                                    className={`block px-4 py-2 text-sm transition-colors duration-200 ${active ? 'bg-blue-600 text-white' : 'text-gray-900'} cursor-pointer`}
+                                                >
+                                                    {testKey}
+                                                </a>
 
-                                        </div>
-                                    )}
-                                </Menu.Item>
-                            ))}
-                            <p className="text-center text-xs mt-8"> <i> Clinically-proven tests that assess different components of your mental health</i>Take</p>
-                        </div>
-                    </Menu.Items>
-                </Transition>
-            </Menu>
+                                                {active && (
+                                                    <p className="text-xs opacity-0 group-hover:opacity-100 transition-opacity mt-1 text-gray-500">
+                                                        {mentalHealthTests[testKey]["description"]}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        )}
+                                    </Menu.Item>
+                                ))}
+                                <p className="text-center text-xs mt-8 text-gray-600">
+                                    <i>Clinically-proven tests that assess different components of your mental health</i>
+                                </p>
+                            </div>
+                        </Menu.Items>
+                    </Transition>
+                </Menu>
+
                 <button className="bg-mint px-6 py-3 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400">
                     Evaluate Emotions
                 </button>
-                <button className="bg-lavendar px-6 py-3 rounded-lg shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400">
+                <button 
+                     onClick={() => navigate(`/chat-bot`)}
+                    className="bg-lavendar px-6 py-3 rounded-lg shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400">
                     Get Advanced Insights
                 </button>
             </div>
@@ -229,6 +245,80 @@ const Account = () => {
                     Take charge of your mental health journey with Mentally. Track your emotions, gain valuable insights, and build a happier, healthier future.
                 </p>
             </div>
+
+            <div id="scoring-instructions" className="mt-16 p-6 bg-white rounded-lg shadow-lg w-full max-w-3xl mx-auto">
+                <h2 className="text-2xl font-semibold mb-4">Interpreting Beckman's Depression Inventory</h2>
+
+                
+                <table className="min-w-full table-auto border-collapse border border-gray-300 mb-6">
+                    <thead>
+                        <tr className="bg-gray-100">
+                            <th className="border-b py-2 px-4 text-left">Total Score</th>
+                            <th className="border-b py-2 px-4 text-left">Levels of Depression</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="border-b py-2 px-4">1-10</td>
+                            <td className="border-b py-2 px-4">These ups and downs are considered normal</td>
+                        </tr>
+                        <tr>
+                            <td className="border-b py-2 px-4">11-16</td>
+                            <td className="border-b py-2 px-4">Mild mood disturbance</td>
+                        </tr>
+                        <tr>
+                            <td className="border-b py-2 px-4">17-20</td>
+                            <td className="border-b py-2 px-4">Borderline clinical depression</td>
+                        </tr>
+                        <tr>
+                            <td className="border-b py-2 px-4">21-30</td>
+                            <td className="border-b py-2 px-4">Moderate depression</td>
+                        </tr>
+                        <tr>
+                            <td className="border-b py-2 px-4">31-40</td>
+                            <td className="border-b py-2 px-4">Severe depression</td>
+                        </tr>
+                        <tr>
+                            <td className="border-b py-2 px-4">Over 40</td>
+                            <td className="border-b py-2 px-4">Extreme depression</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2 className="text-2xl font-semibold mb-4">Interpreting the Patient Health Questionnaire (PHQ-9)</h2>
+                
+                <table className="min-w-full table-auto border-collapse border border-gray-300">
+                    <thead>
+                        <tr className="bg-gray-100">
+                            <th className="border-b py-2 px-4 text-left">Total Score</th>
+                            <th className="border-b py-2 px-4 text-left">Levels of Depression</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td className="border-b py-2 px-4">0–4</td>
+                            <td className="border-b py-2 px-4">No or minimal depression</td>
+                        </tr>
+                        <tr>
+                            <td className="border-b py-2 px-4">5–9</td>
+                            <td className="border-b py-2 px-4">Mild depression</td>
+                        </tr>
+                        <tr>
+                            <td className="border-b py-2 px-4">10–14</td>
+                            <td className="border-b py-2 px-4">Moderate depression</td>
+                        </tr>
+                        <tr>
+                            <td className="border-b py-2 px-4">15–19</td>
+                            <td className="border-b py-2 px-4">Moderately severe depression</td>
+                        </tr>
+                        <tr>
+                            <td className="border-b py-2 px-4">20–27</td>
+                            <td className="border-b py-2 px-4">Severe depression</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
         </div>
 
         </>

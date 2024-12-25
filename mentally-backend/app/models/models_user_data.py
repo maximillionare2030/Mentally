@@ -10,6 +10,7 @@ class MentalHealthData(BaseModel):
     surprise: Optional[int] = 0
     disgust: Optional[int] = 0
     PHQ_score: Optional[int] = 0
+    BDI_score: Optional[int] = 0
     notes : Optional[str] = ""
 
 class UserSchema(BaseModel):

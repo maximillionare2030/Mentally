@@ -1,4 +1,6 @@
 import os
+from dotenv import load_dotenv
+load_dotenv()
 import firebase_admin
 from firebase_admin import credentials, firestore
 import pyrebase
