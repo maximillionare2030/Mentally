@@ -283,126 +283,207 @@
       ]
     }
   },
-  "EKMAN-EMOTIONS": {
-    "happiness": {
-      "questions": [
-        {
-          "question": "What makes you feel most joyful?",
-          "responses": {
-            "Spending time with loved ones": 50,
-            "Achieving a personal goal": 40,
-            "Enjoying a hobby": 30
+    "EKMAN-EMOTIONS": {
+      "Happiness": {
+        "description": "The feeling of pleasure, joy, or contentment resulting from positive experiences or achievements.",
+        "questions": [
+          {
+            "question": "I feel...",
+            "responses": {
+              "Extremely unhappy": -5,
+              "Slightly unhappy": -2.5,
+              "Neither unhappy or happy": 0,
+              "Slightly happy": 2.5,
+              "Extremely happy": 5
+            }
+          },
+          {
+            "question": "How do you typically celebrate a happy moment?",
+            "responses": {
+              "Sharing it with others": 2,
+              "Enjoying it alone": -1,
+              "Documenting the moment": -2,
+              "I don't know": -3
+            }
+          },
+          {
+            "question": "When was the last time you felt true joy?",
+            "responses": {
+              "Today": 2,
+              "Last week": 0,
+              "Last month": -1,
+              "Last year": -2,
+              "More than a year ago": -3,
+              "I don't know": -5
+            }
           }
-        },
-        {
-          "question": "How do you typically celebrate a happy moment?",
-          "responses": {
-            "Sharing it with others": 50,
-            "Enjoying it alone": 40,
-            "Documenting the moment": 30
+        ]
+      },
+      "Sadness": {
+        "description": "A feeling of sorrow or unhappiness, often caused by loss, disappointment, or difficult circumstances.",
+        "questions": [
+          {
+            "question": "When was the last time you felt truly sad?",
+            "responses": {
+              "Today": 3,
+              "Last week": 1.5,
+              "Last month": 1,
+              "Last year": 0,
+              "More than a year ago": -2,
+              "I don't know": 0
+            }
+          },
+          {
+            "question": "How do you usually cope with loss?",
+            "responses": {
+              "Talking to someone": -2,
+              "Distracting yourself": 0,
+              "Allowing yourself to feel it": 1,
+              "I don't get sad": 1,
+              "I don't know": 0
+            }
+          },
+          {
+            "question": "When something bad happens to you, do you think",
+            "responses": {
+              "I deserved it, it's my fault": 1,
+              "It's okay, things will get better": -2,
+              "I don't deserve this": 1,
+              "I don't know": 0
+            }
           }
-        }
-      ]
-    },
-    "sadness": {
-      "questions": [
-        {
-          "question": "What tends to make you feel sad?",
-          "responses": {
-            "Loss of a loved one": -80,
-            "A missed opportunity": -60,
-            "Watching a sad movie": -40
+        ]
+      },
+      "Disgust": {
+        "description": "A strong aversion or repulsion toward something considered unpleasant, offensive, or unacceptable.",
+        "questions": [
+          {
+            "question": "How would you describe your appearance?",
+            "responses": {
+              "Extremely ugly": 3,
+              "Below average": 1,
+              "Average": 0,
+              "Above average": -1,
+              "Extremely beautiful": -3
+            }
+          },
+          {
+            "question": "Compared to others, how good you think your life is?",
+            "responses": {
+              "Much worse": 3,
+              "Slightly worse": 1,
+              "About the same": 0,
+              "Slightly better": 0.5,
+              "Much better": 1.5
+            }
+          },
+          {
+            "question": "When you see others succeed, how does that make you feel?",
+            "responses": {
+              "Happy for them": -2,
+              "Indifferent": 0,
+              "Envious": 2,
+              "Makes me feel worse about myself": 3
+            }
           }
-        },
-        {
-          "question": "How do you usually cope with sadness?",
-          "responses": {
-            "Talking to someone": 50,
-            "Distracting yourself": 30,
-            "Allowing yourself to feel it": 20
+        ]
+      },
+      "Fear": {
+        "description": "A response to perceived threats or danger, characterized by feelings of unease, worry, or panic.",
+        "questions": [
+          {
+            "question": "How do you typically respond to unexpected danger?",
+            "responses": {
+              "Freeze and feel paralyzed": -8,
+              "Run away immediately": -5,
+              "Take calculated action": 3,
+              "I don't feel fear in such situations": 1
+            }
+          },
+          {
+            "question": "What usually keeps you awake at night?",
+            "responses": {
+              "Worry about the future": -5,
+              "Bad memories or regrets": -7,
+              "A feeling of unease or dread": -6,
+              "Nothing really": 0
+            }
+          },
+          {
+            "question": "How do you deal with feelings of fear?",
+            "responses": {
+              "Avoid the situation causing fear": -4,
+              "Confront my fears directly": 4,
+              "Seek support or advice": 2,
+              "I don't deal with it at all": -2
+            }
           }
-        }
-      ]
-    },
-    "disgust": {
-      "questions": [
-        {
-          "question": "What is something you find revolting?",
-          "responses": {
-            "Certain foods": -30,
-            "Unhygienic environments": -50,
-            "Unethical behaviors": -70
+        ]
+      },
+      "Anger": {
+        "description": "A strong emotional response to perceived wrongs or injustices, often accompanied by frustration or hostility.",
+        "questions": [
+          {
+            "question": "How often do you feel angry?",
+            "responses": {
+              "Almost every day": 5,
+              "Once a week": 3,
+              "Occasionally": 1,
+              "Rarely or never": -2
+            }
+          },
+          {
+            "question": "When you're angry, what do you usually do?",
+            "responses": {
+              "Yell or raise my voice": 2,
+              "Keep it bottled up": -3,
+              "Try to calm myself down": -2,
+              "Take it out on others": 5
+            }
+          },
+          {
+            "question": "How do you feel after an argument?",
+            "responses": {
+              "Still angry": 4,
+              "Regretful or guilty": -1,
+              "Completely fine": -2,
+              "Confused or conflicted": 0
+            }
           }
-        },
-        {
-          "question": "How do you react when you feel disgusted?",
-          "responses": {
-            "Avoid the situation": 50,
-            "Express disapproval": 30,
-            "Try to tolerate it": 10
+        ]
+      },
+      "Surprise": {
+        "description": "An emotional reaction to an unexpected or unanticipated event, which can be either positive or negative.",
+        "questions": [
+          {
+            "question": "What kind of surprises do you enjoy the most?",
+            "responses": {
+              "Unexpected good news": 7,
+              "Surprise parties or events": 5,
+              "Discovering something new": 6,
+              "I don't enjoy surprises": -3
+            }
+          },
+          {
+            "question": "How often do unexpected events throw off your plans?",
+            "responses": {
+              "Almost always": 5,
+              "Occasionally": 3,
+              "Rarely": 1,
+              "Never": -1
+            }
+          },
+          {
+            "question": "When someone surprises you, how do you feel?",
+            "responses": {
+              "Delighted and excited": 5,
+              "Shocked but interested": 3,
+              "Confused or uneasy": 1,
+              "I dislike surprises entirely": -2
+            }
           }
-        }
-      ]
-    },
-    "fear": {
-      "questions": [
-        {
-          "question": "What typically makes you feel afraid?",
-          "responses": {
-            "A dangerous situation": -70,
-            "Uncertainty about the future": -50,
-            "A past traumatic experience": -90
-          }
-        },
-        {
-          "question": "How do you usually respond to fear?",
-          "responses": {
-            "Freeze in the moment": -60,
-            "Take immediate action": 50,
-            "Seek comfort or help": 30
-          }
-        }
-      ]
-    },
-    "anger": {
-      "questions": [
-        {
-          "question": "What triggers anger for you?",
-          "responses": {
-            "Injustice": -70,
-            "Being disrespected": -50,
-            "Being misunderstood": -30
-          }
-        },
-        {
-          "question": "How do you usually deal with anger?",
-          "responses": {
-            "Express it openly": 50,
-            "Suppress it": -30,
-            "Channel it into productive action": 20
-          }
-        }
-      ]
-    },
-    "surprise": {
-      "questions": [
-        {
-          "question": "What is something that has recently surprised you?",
-          "responses": {
-            "A sudden good news": 70,
-            "An unexpected challenge": 50,
-            "A surprising discovery": 60
-          }
-        },
-        {
-          "question": "How do you react when surprised?",
-          "responses": {
-            "Laugh or smile": 50,
-            "Feel shocked and silent": 20,
-            "Quickly adapt to the situation": 40
-          }
-        }
-      ]
+        ]
+      }
     }
   }
-}
+  

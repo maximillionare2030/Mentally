@@ -1,5 +1,6 @@
 uvicorn
 fastapi
+fastapi-utils
 starlette
 python-dotenv
 pydantic
@@ -12,3 +13,4 @@ datetime
 typing
 apscheduler
 openai
+typing-inspect

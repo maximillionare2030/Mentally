@@ -16,7 +16,8 @@ client = OpenAI(
 @router.post("/generate-mental-health-tests/")
 async def generate_text_mental(request: OpenAIRequest):
     """
-    Endpoint to generate text using OpenAI API.
+    @brief   Endpoint to generate text using OpenAI API.
+    @params  request (OpenAIRequest) : the user prompt, entered as a string normally
     """
     # Prepare the instruction prompt that includes your requirements
     trained_prompt = f"""
@@ -27,11 +28,18 @@ async def generate_text_mental(request: OpenAIRequest):
     ** Only one of these will be evaluated per request, so don't include the other one in your response if not provided **
     PHQ: (score) - respond with how someone with a PHQ score of (score) should try to improve their score
     Beckman: (score) - respond with how someone with a PHQ score of (score) should try to improve their score
+    emotion : value **AND** Difference : value). Here, a current mental score will be provided, as well as a score from -100 to 100.
+                            this measures how intense of an emotion is felt, so for example if fear : 100, then the person is very fearful
 
-    Start by stating their score and what test they just submitted, then provide ways to improve their score / mental health,
+
+    Start by stating their score and what test they just submitted, then provide ways to improve their score / in the given area.
+    - For PHQ and Beckman, focus on mental health
+    - For emotion scores, forcus on improving that specific emotion. (example, if someone is sad, try to help them improve happiness)
     make it seem like you are talking to a person as if you are a therapist and concerned for their well-being.
 
     If their score is good (low) then encourage them to keep going and congratulate them on their score, but still provide input on improvements if any.
+
+    
 
 
     {request.prompt}  # Access the prompt from the request
@@ -48,24 +56,13 @@ async def generate_text_mental(request: OpenAIRequest):
         return {"response": response.choices[0].message.content.strip()}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"OpenAI API error: {str(e)}")
-    
-from pydantic import BaseModel
-
-class MentalHealthData(BaseModel):
-    fear: int
-    surprise: int
-    disgust: int
-    PHQ_score: int
-    happiness: int
-    BDI_score: int
-    anger: int
-    sadness: int
-    notes: str
 
 @router.post("/chat-bot-buddy/")
 async def generate_buddy_response(request: OpenAIRequest, data: MentalHealthData):
     """
-    Endpoint to generate text using OpenAI API.
+    @brief  Endpoint to generate text using OpenAI API, but for the ChatBOT feature
+
+    @param  
     """
     # Verify the incoming data and prompt
     print("Received mental health data:", data)
@@ -84,7 +81,11 @@ async def generate_buddy_response(request: OpenAIRequest, data: MentalHealthData
         - Logically, higher happiness is good, but higher emotional values for disgust and fear are bad
 
     - YOU SHOULD ACT AS A THERAPIST AND PSYCHOLOGIST WHEN REVIEWING DATA. Stay neutral and positive, while also listening to whatever the user prompts, as well as 
-        proprely analyzing their data thoroughly
+        proprely analyzing their data thoroughly.
+
+    - If you see any critical values like intense fear, please try to ask the user about it.
+
+    - Keep responses concise, no more than 5 sentences
     {data}  # User's current Mental health profile
     {request.prompt} # User's prompt
     """

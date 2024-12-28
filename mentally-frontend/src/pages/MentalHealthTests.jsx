@@ -90,14 +90,20 @@ const MentalHealthTests = () => {
     }, [selectedIndex, questionIndex, selectedResponse]);
 
     return (
-        <div className="h-screen bg-gradient-to-b from-mint via-lightBlue to-darkBlue flex items-center justify-center">
-            <div className="w-1/2 p-8 bg-white rounded-lg shadow-lg">
-                        {/* Navbar */}
-                <div className="w-full bg-white p-4 flex justify-between items-center shadow-lg">
-                    <div className="text-2xl font-semibold">
-                    </div>
-                    
+        <div className="h-screen bg-gradient-to-b from-mint via-lightBlue to-darkBlue flex flex-col items-center">
+            {/* Navbar */}
+            <div className="w-full bg-white p-4 flex justify-between items-center shadow-lg mb-72">
+                <div className="text-2xl font-semibold"></div>
+                <div className="flex items-center gap-4">
+                    <FontAwesomeIcon icon={faSignOutAlt} className="cursor-pointer" onClick={() => navigate('/account')} />
+                    <a href="/account" className="">Dashboard</a>
                 </div>
+            </div>
+
+                
+            <div className="w-1/2 p-8 bg-white items-center justify-center rounded-lg shadow-lg">
+                        
+               
                 {!testComplete ? (
                     <>
                         <h2 className="font-semibold text-dimGrey text-center mb-8 text-gray-700">

@@ -86,7 +86,7 @@ const Account = () => {
         <div className="min-h-screen bg-gradient-to-b from-lavendar via-lightBlue to-mint flex flex-col items-center py-10">
             {/* Navbar */}
             <div className="w-full bg-white p-4 flex justify-between items-center shadow-lg">
-                <div className="text-2xl font-semibold">
+            <div className="text-2xl font-semibold">
                     <FontAwesomeIcon icon={faUser} /> <span>{nickname}</span>
                 </div>
                 <div>
@@ -163,7 +163,7 @@ const Account = () => {
             {/* Take Assessments Section */}
             <div className="flex flex-row justify-center w-full gap-4 mt-8">
              <Menu as="div" className="relative">
-                    <Menu.Button className="bg-clay px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all duration-200 ease-in-out">
+                    <Menu.Button className="bg-clay px-6 py-3 rounded-lg shadow-md hover:bg-dimGrey focus:outline-none focus:ring-2 focus:ring-grey-400 transition-all duration-200 ease-in-out">
                         Take Mental Health Assessments
                     </Menu.Button>
 
@@ -206,14 +206,54 @@ const Account = () => {
                         </Menu.Items>
                     </Transition>
                 </Menu>
+                        <Menu as="div" className="relative">
+                    <Menu.Button className="bg-mint px-6 py-3 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200 ease-in-out">
+                        Evaluate Emotions
+                    </Menu.Button>
 
-                <button className="bg-mint px-6 py-3 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400">
-                    Evaluate Emotions
-                </button>
+                    <Transition
+                        as={Fragment}
+                        enter="transition-transform ease-out duration-300"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition-transform ease-in duration-150"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                    >
+                        <Menu.Items className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/4 max-h-screen overflow-y-auto bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div className="p-4">
+                                <h3 className="text-center text-lg font-semibold">Ekman's Emotions</h3>
+                                {Object.keys(emotionTests).map((testKey) => (
+                                    <Menu.Item key={testKey}>
+                                        {({ active }) => (
+                                            <div className="group">
+                                                <a
+                                                    onClick={() => navigate(`/emotion-tests/`, { state: { testKey } })}
+                                                    className={`block px-4 py-2 text-sm transition-colors duration-200 ${active ? 'bg-blue-600 text-white' : 'text-gray-900'} cursor-pointer`}
+                                                >
+                                                    {testKey}
+                                                </a>
+
+                                                {active && (
+                                                    <p className="text-xs opacity-0 group-hover:opacity-100 transition-opacity mt-1 text-gray-500">
+                                                        {emotionTests[testKey]["description"]}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        )}
+                                    </Menu.Item>
+                                ))}
+                                <p className="text-center text-xs mt-8 text-gray-600">
+                                    <i>Award-winning Pyschologic, Paul Ekman's, six key emotions that he uses to assess the human psyche</i>
+                                </p>
+                            </div>
+                        </Menu.Items>
+                    </Transition>
+                </Menu>
                 <button 
                      onClick={() => navigate(`/chat-bot`)}
                     className="bg-lavendar px-6 py-3 rounded-lg shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400">
-                    Get Advanced Insights
+                    AI Insights
                 </button>
             </div>
 

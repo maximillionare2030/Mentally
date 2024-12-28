@@ -22,12 +22,24 @@ router = APIRouter()
 
 # Function to run daily tasks (create snapshots)
 async def create_snapshots():
-    # Get current timestamp
+    """
+    @brief  Helper function for creating snapshots of ENTIRE user information data.
+            ** Creates a file for each user, in new collection (user_snapshots).
+            ** Uses Firestore for data storage.
+            ** Appends a JSON objects of 
+                "<timestamp>" : {
+                "mental_health_data": "<mental_health_data>"
+                "timestampe" : "<deciphered timestamp>
+                } 
+            ** If a snap shot does not exists, a user file will be just be created
+            
+    """
+    # Get current timestamp in utc-8 
     current_timestamp = datetime.utcnow()
 
     # Query all users
     users_ref = db.collection('users')
-    users = users_ref.stream()
+    users = users_ref.stream()      #  Creates a list of all user files
 
     for user in users:
         user_data = user.to_dict()
@@ -62,21 +74,31 @@ async def create_snapshots():
 
     print("Snapshots created for all users.")
 
-# Initialize the BackgroundScheduler
-scheduler = BackgroundScheduler()
 
-# Schedule the `create_snapshots` function to run every 24 hours (86400 seconds)
-scheduler.add_job(create_snapshots, 'interval', seconds=15)
+"""
+@brief  Implementation of daily snapshots taken every 24 hours.
+        TODO: Fix lol
 
-# Start the scheduler
-scheduler.start()
+"""
 
-@router.post("/take-daily-snapshots")
-async def take_daily_snapshots(background_tasks: BackgroundTasks):
+
+from fastapi_utils.tasks import repeat_every
+from fastapi_utils.session import FastAPISessionMaker
+
+@router.on_event("startup")
+@repeat_every(seconds=1 * 60* 60 * 24)  # Run every 24 Hours
+async def take_daily_snapshots():
+    """
+    @brief Periodically take daily snapshots of user data.
+    """
     try:
-        # You can still manually trigger the task if needed, but it will run every 24 hours automatically
-        background_tasks.add_task(create_snapshots)
-
+        await create_snapshots()
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-    return {"message": "Snapshot creation is scheduled to run every 24 hours."}
+        # Log the exception instead of raising HTTPException in a background task
+        print(f"Error while creating snapshots: {e}")
+
+
+
+
+
+

@@ -18,6 +18,13 @@ router = APIRouter()    # Creates Blueprint for router to main.py
 
 @router.post('/signup')
 async def create_account(user_data: SignUpSchema):
+    """
+    @brief  Endpoint that signs up a user with email, password, and nickname
+
+    @params See below
+
+    @returns JSON Success/Fail Response 
+    """
     email = user_data.email
     password = user_data.password
     nickname = user_data.nickname
@@ -60,9 +67,15 @@ async def create_account(user_data: SignUpSchema):
 
 
 
-
 @router.post('/login')
 async def create_access_token(user_data: LoginSchema):
+    """
+    @brief  Endpoint that logs in a user with email, password, and nickname
+
+    @params See below
+
+    @returns  A success/fail message and a JWt token that expires in 1 hour.
+    """
     email = user_data.email
     password = user_data.password
 
@@ -95,6 +108,13 @@ async def validate_token(request: Request):
 
 @router.post('/get_user_data')
 def get_user_data(request: Request):
+    """
+    @brief  Endpoint that gets user data from Firestore ("users") collection. A JWT is used as a parameter to get the user_id of the individual to index their file
+
+    @param  request (Request): Normally holds a string object with the JWT
+
+    @returns  A dictionary of user data
+    """
     headers = request.headers
     jwt = headers.get('Authorization')
 
@@ -121,6 +141,13 @@ def get_user_data(request: Request):
 
 @router.post('/update-mental-data')
 async def update_mental_data(request: Request, data: MentalHealthData):
+    """
+    @brief  Endpoint used for updating a user's mental health data. Takes a JWT token, gets user -> gets data.
+
+    @param  request (Request): primarily just a JWT token
+            data (MentalHealthData) : a JSON object MentalHealthData. Not all attributes need to be filled, so overwriting only happens when included
+    @returns  A success/fail message
+    """
     headers = request.headers
     jwt = headers.get('Authorization')
 
