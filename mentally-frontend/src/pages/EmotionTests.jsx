@@ -3,11 +3,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { generate_response } from '../utils/api/openai.js';
-import { updateUserData } from '../utils/api/user_auth.js';
+import { updateUserData } from '../utils/api/user.js';
 import MCQ from "../components/mcq.jsx";
 
 import data from "../utils/mental-health-tests.json";
-import { getUserData } from '../utils/api/user_auth.js';
+import { getUserData } from '../utils/api/user.js';
 
 const EmotionTets = () => {
     const navigate = useNavigate();
@@ -49,7 +49,7 @@ const EmotionTets = () => {
     scoreTestRef.current = newEmotion || 0;
 
 
-        handleOpenAIResponse(tempTestKey, ":", newEmotion, "Difference in score: ", emotionDelta);
+        handleOpenAIResponse(tempTestKey + ":" + newEmotion + "Difference in score: " +  emotionDelta);
     }
     
         const handleOpenAIResponse = async (prompt) => {

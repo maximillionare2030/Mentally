@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserData } from "../utils/api/user_auth.js"; // Assuming getUserData is imported from the correct path
+import { getUserData } from "../utils/api/user.js"; // Assuming getUserData is imported from the correct path
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { updateUserData } from '../utils/api/user_auth.js';
+import { updateUserData, getUserHistory } from '../utils/api/user.js';
 
 import { Fragment } from 'react';  // Add this import
 import { Menu, Transition} from '@headlessui/react';
 
 import data from "../utils/mental-health-tests.json";
+
+import UserCalendar from "../components/ui/calendar.jsx";
+import LineGraph from '../components/ui/linegraph.jsx';
 
 
 const Account = () => {
@@ -16,6 +19,7 @@ const Account = () => {
     const mentalHealthTests = data['Mental-Health-Tests'];
     const emotionTests = data['EKMAN-EMOTIONS'];
     const [userData, setUserData] = useState(null);
+    const [userHistory, setUserHistory] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -25,7 +29,6 @@ const Account = () => {
         
         if (storedUserData) {
             const parsedUserData = JSON.parse(storedUserData);
-            console.log(parsedUserData);
             const { currentJWT } = parsedUserData;
             
             try {
@@ -42,7 +45,7 @@ const Account = () => {
                 setError('An error occurred while fetching user data');
                 navigate('/');
             } finally {
-                setLoading(false);
+                setLoading(false);   
             }
         } else {
             setError('No user data found, please log in');
@@ -51,9 +54,25 @@ const Account = () => {
         }
     };
 
+    const fetchUserHistory = async () => {
+        const history = await getUserHistory(userData?.user_id);
+        setUserHistory(history?.snapshot_doc);
+        console.log(userHistory);
+    }
+    
+
+
+    // Trigger the user data fetch first
     useEffect(() => {
         fetchUserData();
-    }, []);
+    }, []);  // Runs once when the component mounts
+
+    // Trigger the user history fetch once userData is available
+    useEffect(() => {
+        if (userData) {
+            fetchUserHistory();  // Fetch user history only after userData is set
+        }
+    }, [userData]);  // Runs when userData is updated
 
     if (loading) {
         return (
@@ -71,7 +90,7 @@ const Account = () => {
         );
     }
 
-    const { email, nickname, mental_health_data } = userData;
+    const { user_id, email, nickname, mental_health_data } = userData;
     const { surprise, disgust, happiness, BDI_score, PHQ_score, anger, sadness, fear } = mental_health_data;
 
     const scrollToInstructions = () => {
@@ -151,15 +170,24 @@ const Account = () => {
             </div>
 
             {/* Insights Section */}
-            <div className="flex flex-row justify-center mt-8 gap-6 p-4 w-3/4 min-h-[300px] bg-white border-2 rounded-lg shadow-lg">
-                <div className="w-full min-h-[300px] bg-lightBlue h-full text-center justify-center">
-                    Calendar
-                </div>
-                <div className="w-full min-h-[300px] bg-lightBlue h-full text-center justify-center">
-                    Graph
-                </div>
+            <div className="flex flex-row justify-center mt-8 gap-6 p-4 w-1/2 min-h-[300px] bg-white border-2 rounded-lg shadow-lg">
+               {userHistory ? (
+                        <UserCalendar history={userHistory} />
+                    ) : (
+                        <div>Loading user history...</div> // Optional: Provide a loading message or spinner if needed
+                    )}
+
+
+
             </div>
 
+            <div className="flex flex-row justify-center mt-8 gap-6 p-4 w-3/4 min-h-[300px] bg-white border-2 rounded-lg shadow-lg">
+                {userHistory ? (
+                        <LineGraph data={userHistory} />
+                    ) : (
+                        <div>Loading user history...</div> // Optional: Provide a loading message or spinner if needed
+                    )}
+                </div>
             {/* Take Assessments Section */}
             <div className="flex flex-row justify-center w-full gap-4 mt-8">
              <Menu as="div" className="relative">
@@ -358,6 +386,64 @@ const Account = () => {
                     </tbody>
                 </table>
             </div>
+
+            <section id="ekman-instructions" className="mt-16 p-6 bg-white rounded-lg shadow-lg w-full max-w-3xl mx-auto">
+                <h2 className="text-2xl font-bold text-gray-800">Ekman's Emotions and Depression</h2>
+                <p className="mt-4 text-gray-700">
+                    Dr. Paul Ekman, a renowned psychologist, identified six basic emotions that are universally recognized across cultures:
+                    happiness, sadness, surprise, fear, anger, and disgust. These emotions are crucial for understanding human expression
+                    and behavior, particularly in the context of mental health.
+                </p>
+                <p className="mt-4 text-gray-700">
+                    Depression can manifest through a variety of emotional expressions, and understanding these can be helpful for assessing
+                    emotional well-being. Below is a guide to how levels of depression might correlate with Ekman's emotional expressions.
+                </p>
+                
+                <div className="mt-8">
+                    <table className="min-w-full border-collapse">
+                    <thead className="bg-gray-100">
+                        <tr>
+                        <th className="border-b py-2 px-4 text-left font-semibold text-gray-700">Total Score</th>
+                        <th className="border-b py-2 px-4 text-left font-semibold text-gray-700">Levels of Depression</th>
+                        <th className="border-b py-2 px-4 text-left font-semibold text-gray-700">Associated Emotions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr className="bg-gray-50">
+                        <td className="border-b py-2 px-4">0-10</td>
+                        <td className="border-b py-2 px-4">No Depression</td>
+                        <td className="border-b py-2 px-4">Happiness, Surprise</td>
+                        </tr>
+                        <tr>
+                        <td className="border-b py-2 px-4">11-20</td>
+                        <td className="border-b py-2 px-4">Mild Depression</td>
+                        <td className="border-b py-2 px-4">Sadness, Disgust</td>
+                        </tr>
+                        <tr className="bg-gray-50">
+                        <td className="border-b py-2 px-4">21-30</td>
+                        <td className="border-b py-2 px-4">Moderate Depression</td>
+                        <td className="border-b py-2 px-4">Fear, Sadness</td>
+                        </tr>
+                        <tr>
+                        <td className="border-b py-2 px-4">31-40</td>
+                        <td className="border-b py-2 px-4">Severe Depression</td>
+                        <td className="border-b py-2 px-4">Anger, Sadness</td>
+                        </tr>
+                        <tr className="bg-gray-50">
+                        <td className="border-b py-2 px-4">41+</td>
+                        <td className="border-b py-2 px-4">Extreme Depression</td>
+                        <td className="border-b py-2 px-4">Disgust, Anger, Sadness</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+
+                <p className="mt-6 text-gray-700">
+                    Recognizing these emotional expressions in conjunction with depression scores can aid in identifying the emotional
+                    state of individuals, allowing for more targeted interventions. If you're experiencing any of these symptoms, consider
+                    seeking professional help.
+                </p>
+                </section>
 
         </div>
 

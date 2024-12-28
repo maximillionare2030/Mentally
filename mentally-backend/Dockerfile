@@ -4,10 +4,10 @@ FROM python:3.12-slim
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the current directory contents into the container (including main.py and app)
+# Copy the backend project files
 COPY ./mentally-backend /app
 
-# Install any needed packages specified in requirements.txt
+# Install dependencies for the backend
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Expose port 8000 for FastAPI to run on

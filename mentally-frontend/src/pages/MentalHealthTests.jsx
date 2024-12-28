@@ -3,7 +3,7 @@ import MCQ from "../components/mcq.jsx";
 import data from "../utils/mental-health-tests.json";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { generate_response } from '../utils/api/openai.js';
-import { updateUserData } from '../utils/api/user_auth.js';
+import { updateUserData } from '../utils/api/user.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
@@ -32,6 +32,8 @@ const MentalHealthTests = () => {
         setSelectedIndex(key);
         setSelectedResponse(responseKeys[key]);
     };
+
+  
 
     const handleOpenAIResponse = async (prompt) => {
         try {

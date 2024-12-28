@@ -1,5 +1,5 @@
 import pyrebase
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Query
 from app.models.models_user_auth import LoginSchema, SignUpSchema
 from app.models.models_user_data import UserSchema, MentalHealthData
 from fastapi.responses import JSONResponse
@@ -180,3 +180,26 @@ async def update_mental_data(request: Request, data: MentalHealthData):
     return "Successfully updated data"
 
 
+@router.post('/get-user-history')
+async def get_user_history(user_id: str = Query(...)):
+    """
+    @brief  Endpoint that gets the user_snapshots doc from their user_id
+    @param  user_id: The document ID (primary key)
+    @returns User's snapshot doc in JSON format
+    """
+    try:
+        # Reference the document
+        user_data_ref = db.collection("user_snapshots").document(user_id)
+
+        # Fetch the document
+        user_doc = user_data_ref.get()
+
+        if user_doc.exists:
+            print("Document data fetched successfully.")
+            return user_doc.to_dict()
+        else:
+            raise HTTPException(status_code=404, detail=f"User document with ID {user_id} not found.")
+    
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")

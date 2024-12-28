@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { logIn, getUserData } from "../utils/api/user_auth.js";
+import { logIn, getUserData } from "../utils/api/user.js";
 import { useNavigate, useLocation } from 'react-router-dom'; 
 
 

@@ -5,12 +5,12 @@ FROM node:18
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY ./mentally-frontend/package*.json ./
+COPY ./mentally-frontend/package*.json ./ 
 
-# Install dependencies
+# Install dependencies for the frontend
 RUN npm install
 
-# Copy the rest of your project files into the container
+# Copy the rest of your frontend project files
 COPY ./mentally-frontend /app
 
 # Build the React app for production

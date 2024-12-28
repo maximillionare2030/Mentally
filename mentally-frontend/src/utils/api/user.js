@@ -136,3 +136,17 @@ export const updateUserData = async (token, mentalHealthData) => {
         throw error;
     }
 };
+
+
+export const getUserHistory = async (user_id) => {
+    try {
+        // Send user_id as a query parameter in the URL
+        const response = await api.post(`/user/get-user-history?user_id=${user_id}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error occurred while fetching user history.");
+        console.error("Response data:", error.response?.data || "No response data");
+        console.error("Error message:", error.message);
+        throw error; // Optional: re-throw the error if the caller needs to handle it
+    }
+};
