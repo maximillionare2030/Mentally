@@ -1,23 +1,19 @@
-# Use the official Node.js image
+# Use an official Node runtime as a parent image
 FROM node:18
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY ./mentally-frontend/package*.json ./ 
-
-# Install dependencies for the frontend
+# Copy the package.json and install dependencies
+COPY package.json /app/
 RUN npm install
 
-# Copy the rest of your frontend project files
-COPY ./mentally-frontend /app
+# Bundle app source including the public and src directories
+COPY ./public /app/public
+COPY ./src /app/src
 
-# Build the React app for production
-RUN npm run build
-
-# Expose the port the app runs on
+# Make port 3000 available to the world outside this container
 EXPOSE 3000
 
-# Serve the build using a static server
-CMD ["npx", "serve", "build"]
+# Run npm start when the container launches
+CMD ["npm", "start"]

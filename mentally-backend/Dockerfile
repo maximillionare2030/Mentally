@@ -2,16 +2,14 @@
 FROM python:3.12-slim
 
 # Set the working directory in the container
-WORKDIR /app
+WORKDIR /code
 
-# Copy the backend project files
-COPY ./mentally-backend /app
+# Copy the current directory contents into the container at /code
+COPY ./app /code/app
+COPY requirements.txt /code/
 
-# Install dependencies for the backend
-RUN pip install --no-cache-dir -r /app/requirements.txt
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-# Expose port 8000 for FastAPI to run on
-EXPOSE 8000
-
-# Run FastAPI with uvicorn (adjusted for the path of main.py)
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run app.py when the container launches
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80"]

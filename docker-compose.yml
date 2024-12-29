@@ -1,37 +1,18 @@
-version: "3.8"
-
+version: '3.9'
 services:
   backend:
-    build:
-      context: .  # Assuming the Dockerfile-backend is in the root of your project
-      dockerfile: Dockerfile-backend
+    build: ./mentally-backend
     ports:
-      - "8000:8000"
-    environment:
-      - REACT_APP_URL=http://localhost:3000  # You can pass any environment variables needed
-    depends_on:
-      - db  # Assuming you have a database, or you can remove this if not needed
+      - "80:80"
+    volumes:
+      - ./backend/app:/code/app
 
   frontend:
-    build:
-      context: .  # Assuming the Dockerfile-frontend is in the root of your project
-      dockerfile: Dockerfile-frontend
+    build: ./mentally-frontend
     ports:
       - "3000:3000"
-    depends_on:
-      - backend  # Ensure backend is started first
-    environment:
-      - REACT_APP_API_URL=http://backend:8000  # Set the API URL to communicate with the backend
-
-  # Optional: If you have a database, here's an example for PostgreSQL
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: mentally
     volumes:
-      - pg_data:/var/lib/postgresql/data
-
-volumes:
-  pg_data:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    depends_on:
+      - backend

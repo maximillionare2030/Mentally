@@ -83,7 +83,6 @@ async def create_snapshots():
 
 
 from fastapi_utils.tasks import repeat_every
-from fastapi_utils.session import FastAPISessionMaker
 
 @router.on_event("startup")
 @repeat_every(seconds=1 * 60* 60 * 24)  # Run every 24 Hours

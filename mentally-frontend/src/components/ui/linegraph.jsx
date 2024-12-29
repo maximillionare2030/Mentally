@@ -80,7 +80,7 @@ const LineGraph = ({ data }) => {
     plugins: {
       title: {
         display: true,
-        text: 'Mental Health Data Over Time',
+        text: 'Mental Health',
       },
       tooltip: {
         mode: 'nearest',
