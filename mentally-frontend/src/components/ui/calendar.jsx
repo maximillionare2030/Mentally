@@ -48,34 +48,43 @@ function UserCalendar({ history }) {
   return (
     <div className="p-6 text-center w-full mx-auto bg-gray-50 rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Mental Health Calendar</h2>
-      <div className="rounded-lg shadow">
-        <Calendar
-          onChange={handleDateChange}
-          value={selectedDate}
-          tileClassName={({ date }) => {
-            const formatted = date.toISOString().split("T")[0];
-            // Highlight dates with events
-            let classes = '';
-            if (events.some((event) => event.timestamp.startsWith(formatted))) {
-              classes = "highlighted-date";
-            }
-            // Add class to highlight selected date
-            if (date.toISOString().split("T")[0] === formattedDate) {
-              classes += " selected-date";
-            }
-            return classes;
-          }}
-          className="mx-auto text-gray-700"
-        />
-      </div>
-      {selectedEvent ? (
-        <div className="mt-6 p-4 bg-blue-100 rounded-lg border border-blue-200">
-          <h3 className="text-xl font-semibold text-blue-800">Mental Health Data</h3>
-          {renderEventDetails(selectedEvent)}
+      <div className="flex justify-between">
+        <div className="w-full sm:w-2/5 mr-6">
+          <div className="rounded-lg shadow">
+            <Calendar
+              onChange={handleDateChange}
+              value={selectedDate}
+              tileClassName={({ date }) => {
+                const formatted = date.toISOString().split("T")[0];
+                // Highlight dates with events
+                let classes = '';
+                if (events.some((event) => event.timestamp.startsWith(formatted))) {
+                  classes = "highlighted-date";
+                }
+                // Add class to highlight selected date
+                if (date.toISOString().split("T")[0] === formattedDate) {
+                  classes += " selected-date";
+                }
+                return classes;
+              }}
+              className="mx-auto text-gray-700"
+            />
+          </div>
         </div>
-      ) : (
-        <p className="mt-6 text-gray-600">No data for this day.</p>
-      )}
+
+        {/* Mental Health Data Section */}
+        <div className="w-full sm:w-3/5">
+          {selectedEvent ? (
+            <div className="mt-6 p-4 bg-blue-100 rounded-lg border border-blue-200">
+              <h3 className="text-xl font-semibold text-blue-800">Mental Health Data</h3>
+              {renderEventDetails(selectedEvent)}
+            </div>
+          ) : (
+            <p className="mt-6 text-gray-600">No data for this day.</p>
+          )}
+        </div>
+      </div>
+
       <style>
         {`
         .react-calendar__tile.highlighted-date {

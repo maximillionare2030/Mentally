@@ -169,115 +169,100 @@ const Account = () => {
                 </div>
             </div>
 
-            {/* Insights Section */}
-            <div className="flex flex-row justify-center mt-8 gap-6 p-4 w-1/2 min-h-[300px] bg-white border-2 rounded-lg shadow-lg">
-               {userHistory ? (
-                        <UserCalendar history={userHistory} />
-                    ) : (
-                        <div>Loading user history...</div> // Optional: Provide a loading message or spinner if needed
-                    )}
-
-
-
-            </div>
-
-            <div className="flex flex-row justify-center mt-8 gap-6 p-4 w-3/4 min-h-[300px] bg-white border-2 rounded-lg shadow-lg">
-                {userHistory ? (
-                        <LineGraph data={userHistory} />
-                    ) : (
-                        <div>Loading user history...</div> // Optional: Provide a loading message or spinner if needed
-                    )}
-                </div>
+{/** BUTTONS FOR ASSESSMENTS --- */}
             {/* Take Assessments Section */}
             <div className="flex flex-row justify-center w-full gap-4 mt-8">
-             <Menu as="div" className="relative">
-                    <Menu.Button className="bg-clay px-6 py-3 rounded-lg shadow-md hover:bg-dimGrey focus:outline-none focus:ring-2 focus:ring-grey-400 transition-all duration-200 ease-in-out">
-                        Take Mental Health Assessments
-                    </Menu.Button>
+            <Menu as="div" className="relative">
+                <Menu.Button className="bg-clay px-6 py-3 rounded-lg shadow-md hover:bg-dimGrey focus:outline-none focus:ring-2 focus:ring-grey-400 transition-all duration-200 ease-in-out z-10">
+                    Take Mental Health Assessments
+                </Menu.Button>
 
-                    <Transition
-                        as={Fragment}
-                        enter="transition-transform ease-out duration-300"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition-transform ease-in duration-150"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                    >
-                        <Menu.Items className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/4 max-h-screen overflow-y-auto bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <div className="p-4">
-                                <h3 className="text-center text-lg font-semibold">Mental Health Tests</h3>
-                                {Object.keys(mentalHealthTests).map((testKey) => (
-                                    <Menu.Item key={testKey}>
-                                        {({ active }) => (
-                                            <div className="group">
-                                                <a
-                                                    onClick={() => navigate(`/user-tests/`, { state: { testKey } })}
-                                                    className={`block px-4 py-2 text-sm transition-colors duration-200 ${active ? 'bg-blue-600 text-white' : 'text-gray-900'} cursor-pointer`}
-                                                >
-                                                    {testKey}
-                                                </a>
+                <Transition
+                    as={Fragment}
+                    enter="transition-transform ease-out duration-300"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition-transform ease-in duration-150"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                >
+                    <Menu.Items className="menu-items fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/4 max-h-screen overflow-y-auto bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+                        <div className="p-4">
+                            <h3 className="text-center text-lg font-semibold">Mental Health Tests</h3>
+                            {Object.keys(mentalHealthTests).map((testKey) => (
+                                <Menu.Item key={testKey}>
+                                    {({ active }) => (
+                                        <div className="group">
+                                            <a
+                                                onClick={() => navigate(`/user-tests/`, { state: { testKey } })}
+                                                className={`block px-4 py-2 text-sm transition-colors duration-200 ${active ? 'bg-blue-600 text-white' : 'text-gray-900'} cursor-pointer`}
+                                            >
+                                                {testKey}
+                                            </a>
 
-                                                {active && (
-                                                    <p className="text-xs opacity-0 group-hover:opacity-100 transition-opacity mt-1 text-gray-500">
-                                                        {mentalHealthTests[testKey]["description"]}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        )}
-                                    </Menu.Item>
-                                ))}
-                                <p className="text-center text-xs mt-8 text-gray-600">
-                                    <i>Clinically-proven tests that assess different components of your mental health</i>
-                                </p>
-                            </div>
-                        </Menu.Items>
-                    </Transition>
-                </Menu>
-                        <Menu as="div" className="relative">
-                    <Menu.Button className="bg-mint px-6 py-3 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200 ease-in-out">
-                        Evaluate Emotions
-                    </Menu.Button>
+                                            {active && (
+                                                <p className="text-xs opacity-0 group-hover:opacity-100 transition-opacity mt-1 text-gray-500">
+                                                    {mentalHealthTests[testKey]["description"]}
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+                                </Menu.Item>
+                            ))}
+                            <p className="text-center text-xs mt-8 text-gray-600">
+                                <i>Clinically-proven tests that assess different components of your mental health</i>
+                            </p>
+                        </div>
+                    </Menu.Items>
+                </Transition>
+            </Menu>
 
-                    <Transition
-                        as={Fragment}
-                        enter="transition-transform ease-out duration-300"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition-transform ease-in duration-150"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                    >
-                        <Menu.Items className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/4 max-h-screen overflow-y-auto bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <div className="p-4">
-                                <h3 className="text-center text-lg font-semibold">Ekman's Emotions</h3>
-                                {Object.keys(emotionTests).map((testKey) => (
-                                    <Menu.Item key={testKey}>
-                                        {({ active }) => (
-                                            <div className="group">
-                                                <a
-                                                    onClick={() => navigate(`/emotion-tests/`, { state: { testKey } })}
-                                                    className={`block px-4 py-2 text-sm transition-colors duration-200 ${active ? 'bg-blue-600 text-white' : 'text-gray-900'} cursor-pointer`}
-                                                >
-                                                    {testKey}
-                                                </a>
+            <Menu as="div" className="relative">
+                <Menu.Button className="bg-mint px-6 py-3 rounded-lg shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-white transition-all duration-200 ease-in-out z-0">
+                    Evaluate Emotions
+                </Menu.Button>
 
-                                                {active && (
-                                                    <p className="text-xs opacity-0 group-hover:opacity-100 transition-opacity mt-1 text-gray-500">
-                                                        {emotionTests[testKey]["description"]}
-                                                    </p>
-                                                )}
-                                            </div>
-                                        )}
-                                    </Menu.Item>
-                                ))}
-                                <p className="text-center text-xs mt-8 text-gray-600">
-                                    <i>Award-winning Pyschologic, Paul Ekman's, six key emotions that he uses to assess the human psyche</i>
-                                </p>
-                            </div>
-                        </Menu.Items>
-                    </Transition>
-                </Menu>
+                <Transition
+                    as={Fragment}
+                    enter="transition-transform ease-out duration-300"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition-transform ease-in duration-150"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                >
+                    <Menu.Items className="menu-items fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1/4 max-h-screen overflow-y-auto bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20">
+                        <div className="p-4">
+                            <h3 className="text-center text-lg font-semibold">Ekman's Emotions</h3>
+                            {Object.keys(emotionTests).map((testKey) => (
+                                <Menu.Item key={testKey}>
+                                    {({ active }) => (
+                                        <div className="group">
+                                            <a
+                                                onClick={() => navigate(`/emotion-tests/`, { state: { testKey } })}
+                                                className={`block px-4 py-2 text-sm transition-colors duration-200 ${active ? 'bg-blue-600 text-white' : 'text-gray-900'} cursor-pointer`}
+                                            >
+                                                {testKey}
+                                            </a>
+
+                                            {active && (
+                                                <p className="text-xs opacity-0 group-hover:opacity-100 transition-opacity mt-1 text-gray-500">
+                                                    {emotionTests[testKey]["description"]}
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+                                </Menu.Item>
+                            ))}
+                            <p className="text-center text-xs mt-8 text-gray-600">
+                                <i>Award-winning Pyschologic, Paul Ekman's, six key emotions that he uses to assess the human psyche</i>
+                            </p>
+                        </div>
+                    </Menu.Items>
+                </Transition>
+            </Menu>
+
+
                 <button 
                      onClick={() => navigate(`/chat-bot`)}
                     className="bg-lavendar px-6 py-3 rounded-lg shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-400">
@@ -294,6 +279,29 @@ const Account = () => {
                 ↓    Instructions ↓
             </button>
 
+
+            {/* Insights Section */}
+            <div className="mt-8  mb-8 px-4 w-3/4 min-h-[300px] bg-white border-2 rounded-lg shadow-lg">
+            {/* Top Section: User Calendar */}
+            <div className="w-full mb-6 flex justify-center">
+                {userHistory ? (
+                <UserCalendar history={userHistory} />
+                ) : (
+                <div className="text-gray-500">Loading user history...</div>
+                )}
+            </div>
+
+            {/* Bottom Section: Line Graph */}
+            <div className="w-full flex justify-center">
+                {userHistory ? (
+                <LineGraph data={userHistory} />
+                ) : (
+                <div className="text-gray-500">Loading user history...</div>
+                )}
+            </div>
+            </div>
+
+        
 
         </div>
         <div className="min-h-screen bg-gradient-to-b from-mint via-lightBlue to-lavendar flex flex-col items-center py-10">

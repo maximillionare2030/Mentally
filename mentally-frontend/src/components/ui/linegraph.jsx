@@ -11,6 +11,8 @@ const LineGraph = ({ data }) => {
     labels: [], // Timestamps
     datasets: [], // Data series for each mental health metric
   });
+  const [xRange, setXRange] = useState([0, 10]); // X axis range (start, end)
+  const [yRange, setYRange] = useState([0, 100]); // Y axis range (min, max)
 
   useEffect(() => {
     if (data) {
@@ -20,6 +22,9 @@ const LineGraph = ({ data }) => {
       const PHQScoreData = [];
       const BDIScoreData = [];
       const sadnessData = [];
+      const angerData = [];
+      const surpriseData = [];
+      const disgustData = [];
 
       Object.keys(data).forEach((key) => {
         const entry = data[key];
@@ -29,6 +34,9 @@ const LineGraph = ({ data }) => {
         PHQScoreData.push(entry.mental_health_data.PHQ_score);
         BDIScoreData.push(entry.mental_health_data.BDI_score);
         sadnessData.push(entry.mental_health_data.sadness);
+        angerData.push(entry.mental_health_data.anger);
+        surpriseData.push(entry.mental_health_data.surprise);
+        disgustData.push(entry.mental_health_data.disgust);
       });
 
       setChartData({
@@ -40,6 +48,7 @@ const LineGraph = ({ data }) => {
             borderColor: "rgba(255, 99, 132, 1)",
             backgroundColor: "rgba(255, 99, 132, 0.2)",
             fill: false,
+            tension: 0.4,
           },
           {
             label: "Happiness",
@@ -47,6 +56,7 @@ const LineGraph = ({ data }) => {
             borderColor: "rgba(54, 162, 235, 1)",
             backgroundColor: "rgba(54, 162, 235, 0.2)",
             fill: false,
+            tension: 0.4,
           },
           {
             label: "PHQ Score",
@@ -54,6 +64,7 @@ const LineGraph = ({ data }) => {
             borderColor: "rgba(75, 192, 192, 1)",
             backgroundColor: "rgba(75, 192, 192, 0.2)",
             fill: false,
+            tension: 0.4,
           },
           {
             label: "BDI Score",
@@ -61,6 +72,7 @@ const LineGraph = ({ data }) => {
             borderColor: "rgba(153, 102, 255, 1)",
             backgroundColor: "rgba(153, 102, 255, 0.2)",
             fill: false,
+            tension: 0.4,
           },
           {
             label: "Sadness",
@@ -68,6 +80,31 @@ const LineGraph = ({ data }) => {
             borderColor: "rgba(255, 159, 64, 1)",
             backgroundColor: "rgba(255, 159, 64, 0.2)",
             fill: false,
+            tension: 0.4,
+          },
+          {
+            label: "Anger",
+            data: angerData,
+            borderColor: "rgba(255, 99, 132, 1)",
+            backgroundColor: "rgba(255, 99, 132, 0.2)",
+            fill: false,
+            tension: 0.4,
+          },
+          {
+            label: "Surprise",
+            data: surpriseData,
+            borderColor: "rgba(255, 159, 64, 1)",
+            backgroundColor: "rgba(255, 159, 64, 0.2)",
+            fill: false,
+            tension: 0.4,
+          },
+          {
+            label: "Disgust",
+            data: disgustData,
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: "rgba(75, 192, 192, 0.2)",
+            fill: false,
+            tension: 0.4,
           },
         ],
       });
@@ -76,7 +113,7 @@ const LineGraph = ({ data }) => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Ensures chart scales with parent container size
+    maintainAspectRatio: false,
     plugins: {
       title: {
         display: true,
@@ -85,49 +122,89 @@ const LineGraph = ({ data }) => {
       tooltip: {
         mode: 'nearest',
         intersect: false,
+        callbacks: {
+          label: function (tooltipItem) {
+            return tooltipItem.dataset.label + ": " + tooltipItem.raw.toFixed(2);
+          },
+        },
       },
     },
     scales: {
       x: {
         type: 'category',
-        title: {
-          display: true,
-          text: 'Timestamp',
+        labels: chartData.labels,
+        display: false,
+        grid: {
+          display: false,
         },
         ticks: {
-          maxRotation: 0,
-          autoSkip: true,
-          maxTicksLimit: 5, // Show only 4-5 ticks at a time
+          maxTicksLimit: 10,
+          min: xRange[0],
+          max: xRange[1],
         },
       },
       y: {
+        grid: {
+          display: true,
+        },
         title: {
           display: true,
           text: 'Values',
         },
+        ticks: {
+          min: yRange[0],
+          max: yRange[1],
+        },
       },
     },
-    // Add zoom and pan options
     interaction: {
       mode: 'index',
       intersect: false,
     },
-    zoom: {
-      pan: {
-        enabled: true,
-        mode: 'xy', // Pan along both axes
-      },
-      zoom: {
-        enabled: true,
-        mode: 'xy', // Zoom along both axes
-        sensitivity: 3, // Sensitivity of zoom
-      },
-    },
   };
 
-  return <div style={{ position: 'relative', width: '100%', height: '400px' }}>
-    <Line data={chartData} options={options} />
-  </div>;
+  const handleXRangeChange = (e) => {
+    const value = e.target.value.split(',').map(Number);
+    setXRange(value);
+  };
+
+  const handleYRangeChange = (e) => {
+    const value = e.target.value.split(',').map(Number);
+    setYRange(value);
+  };
+
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '400px' }}>
+      <Line data={chartData} options={options} />
+      <div style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between' }}>
+       {/**  <div>
+          <label>X Axis Range: </label>
+          <input
+            type="range"
+            min="0"
+            max={chartData.labels.length - 1}
+            value={`${xRange[0]},${xRange[1]}`}   TODO: FIX THE SCROLLING
+            onChange={handleXRangeChange}
+            step="1"
+            style={{ width: '80%' }}
+          />
+        </div>
+        <div>
+          <label>Y Axis Range: </label>
+          <input
+            type="range"
+            min="0"
+            max={Math.max(...chartData.datasets.flatMap(dataset => dataset.data))}
+            value={`${yRange[0]},${yRange[1]}`}
+            onChange={handleYRangeChange}
+            step="1"
+            style={{ width: '80%' }}
+          />
+        </div> */}
+      </div> 
+
+    </div>
+  );
 };
 
 export default LineGraph;
