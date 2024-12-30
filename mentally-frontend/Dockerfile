@@ -1,19 +1,23 @@
-# Use an official Node runtime as a parent image
+# mentally/mentally-frontend/Dockerfile
+# pull official base image
 FROM node:18
-
-# Set the working directory in the container
+# set working directory
 WORKDIR /app
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH=/app/node_modules/.bin:$PATH
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+# Silent clean install of npm
+RUN npm ci --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+# add appF
+COPY . /app/
 
-# Copy the package.json and install dependencies
-COPY package.json /app/
-RUN npm install
+# Build production
+RUN npm run build
+RUN npm install -g serve
 
-# Bundle app source including the public and src directories
-COPY ./public /app/public
-COPY ./src /app/src
+## Start the app on port 3006
+CMD ["serve", "-s", "build", "-l", "3006"]
 
-# Make port 3000 available to the world outside this container
-EXPOSE 3000
-
-# Run npm start when the container launches
-CMD ["npm", "start"]
