@@ -19,3 +19,25 @@ export const generate_response = async (prompt) => {
     }
 };
 
+export const generate_buddy_response = async (prompt, mentalHealthData) => {
+    try {
+        const requestData = {
+            request: { prompt },
+            data: mentalHealthData,
+        };
+
+        console.log("Sending request:", requestData);
+
+        const response = await api.post("/openai/chat-bot-buddy", requestData);
+
+        console.log("API Response:", response.data);
+        
+        return response.data;
+    } catch (err) {
+        console.error("Error response:", err.response?.data || err.message);
+        throw err;
+    }
+};
+
+
+

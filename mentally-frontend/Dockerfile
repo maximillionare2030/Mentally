@@ -1,23 +1,23 @@
-# Use the official Node.js image
+# mentally/mentally-frontend/Dockerfile
+# pull official base image
 FROM node:18
-
-# Set the working directory in the container
+# set working directory
 WORKDIR /app
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH=/app/node_modules/.bin:$PATH
+# install app dependencies
+COPY package.json ./
+COPY package-lock.json ./
+# Silent clean install of npm
+RUN npm ci --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+# add appF
+COPY . /app/
 
-# Copy package.json and package-lock.json
-COPY ./mentally-frontend/package*.json ./
-
-# Install dependencies
-RUN npm install
-
-# Copy the rest of your project files into the container
-COPY ./mentally-frontend /app
-
-# Build the React app for production
+# Build production
 RUN npm run build
+RUN npm install -g serve
 
-# Expose the port the app runs on
-EXPOSE 3000
+## Start the app on port 3006
+CMD ["serve", "-s", "build", "-l", "3006"]
 
-# Serve the build using a static server
-CMD ["npx", "serve", "build"]

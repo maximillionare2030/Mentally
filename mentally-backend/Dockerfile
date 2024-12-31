@@ -1,17 +1,15 @@
-# Use an official Python runtime as a parent image
-FROM python:3.12-slim
+# mentally/mentally-backend/Dockerfile
+FROM python:3.12
 
-# Set the working directory in the container
-WORKDIR /app
+WORKDIR /code
 
-# Copy the current directory contents into the container (including main.py and app)
-COPY ./mentally-backend /app
+COPY ./requirements.txt /code/requirements.txt
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-# Expose port 8000 for FastAPI to run on
+COPY ./ /code/
+
+# Expose port 8000 for the FastAPI server
 EXPOSE 8000
 
-# Run FastAPI with uvicorn (adjusted for the path of main.py)
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

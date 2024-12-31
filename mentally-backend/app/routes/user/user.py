@@ -1,5 +1,5 @@
 import pyrebase
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, Query
 from app.models.models_user_auth import LoginSchema, SignUpSchema
 from app.models.models_user_data import UserSchema, MentalHealthData
 from fastapi.responses import JSONResponse
@@ -18,6 +18,13 @@ router = APIRouter()    # Creates Blueprint for router to main.py
 
 @router.post('/signup')
 async def create_account(user_data: SignUpSchema):
+    """
+    @brief  Endpoint that signs up a user with email, password, and nickname
+
+    @params See below
+
+    @returns JSON Success/Fail Response 
+    """
     email = user_data.email
     password = user_data.password
     nickname = user_data.nickname
@@ -60,15 +67,22 @@ async def create_account(user_data: SignUpSchema):
 
 
 
-
 @router.post('/login')
 async def create_access_token(user_data: LoginSchema):
+    """
+    @brief  Endpoint that logs in a user with email, password, and nickname
+
+    @params See below
+
+    @returns  A success/fail message and a JWt token that expires in 1 hour.
+    """
     email = user_data.email
     password = user_data.password
 
     try:
         user = firebase.auth().sign_in_with_email_and_password(email=email, password=password)
         token = user['idToken']
+        expires_in = 5 * 24 * 60 * 60  # 5 days in seconds TODO: Implement longer lasting JWT tokens -- fk trying to asynchronously refresh
         
         # Fetch the user by their UID from Firestore
         user_ref = db.collection("users").document(user['localId'])
@@ -79,7 +93,6 @@ async def create_access_token(user_data: LoginSchema):
         return JSONResponse(content={
                                         "message": "Log in Successful",
                                         "token": token}, status_code=200)
-    
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
@@ -95,6 +108,13 @@ async def validate_token(request: Request):
 
 @router.post('/get_user_data')
 def get_user_data(request: Request):
+    """
+    @brief  Endpoint that gets user data from Firestore ("users") collection. A JWT is used as a parameter to get the user_id of the individual to index their file
+
+    @param  request (Request): Normally holds a string object with the JWT
+
+    @returns  A dictionary of user data
+    """
     headers = request.headers
     jwt = headers.get('Authorization')
 
@@ -121,6 +141,13 @@ def get_user_data(request: Request):
 
 @router.post('/update-mental-data')
 async def update_mental_data(request: Request, data: MentalHealthData):
+    """
+    @brief  Endpoint used for updating a user's mental health data. Takes a JWT token, gets user -> gets data.
+
+    @param  request (Request): primarily just a JWT token
+            data (MentalHealthData) : a JSON object MentalHealthData. Not all attributes need to be filled, so overwriting only happens when included
+    @returns  A success/fail message
+    """
     headers = request.headers
     jwt = headers.get('Authorization')
 
@@ -153,3 +180,26 @@ async def update_mental_data(request: Request, data: MentalHealthData):
     return "Successfully updated data"
 
 
+@router.post('/get-user-history')
+async def get_user_history(user_id: str = Query(...)):
+    """
+    @brief  Endpoint that gets the user_snapshots doc from their user_id
+    @param  user_id: The document ID (primary key)
+    @returns User's snapshot doc in JSON format
+    """
+    try:
+        # Reference the document
+        user_data_ref = db.collection("user_snapshots").document(user_id)
+
+        # Fetch the document
+        user_doc = user_data_ref.get()
+
+        if user_doc.exists:
+            print("Document data fetched successfully.")
+            return user_doc.to_dict()
+        else:
+            raise HTTPException(status_code=404, detail=f"User document with ID {user_id} not found.")
+    
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")

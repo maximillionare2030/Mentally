@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { signUp, logIn, getUserData, updateUserData } from "../utils/api/user_auth.js";
+import { signUp, logIn, getUserData, updateUserData } from "../utils/api/user.js";
 import { useNavigate, useLocation } from 'react-router-dom'; // Import useNavigate from react-router-dom
 
 const SignUpForm = () => {

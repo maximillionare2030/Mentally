@@ -1,23 +1,25 @@
-version: "3.8"
-
 services:
-  frontend:
+  backend:
+    env_file:
+      - mentally-backend/.env
     build:
-      context: .
-      dockerfile: mentally-frontend/Dockerfile
+      context: ./mentally-backend
+      dockerfile: ./Dockerfile
+    restart: always
     ports:
-      - "3000:3000"
+      - "127.0.0.1:8000:8000"  # Use localhost or 127.0.0.1 for binding
     networks:
       - app-network
-    depends_on:
-      - backend
 
-  backend:
+  frontend:
+    env_file:
+      - mentally-frontend/.env
     build:
-      context: .
-      dockerfile: mentally-backend/Dockerfile
+      context: ./mentally-frontend
+      dockerfile: ./Dockerfile
+    restart: always
     ports:
-      - "8000:8000"
+      - "127.0.0.1:3006:3006"  # Same for frontend if needed
     networks:
       - app-network
 

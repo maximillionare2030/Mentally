@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MCQ from "../components/mcq.jsx";
 import data from "../utils/mental-health-tests.json";
-import { signUp } from "../utils/api/user_auth.js";
+import { signUp } from "../utils/api/user.js";
 import { useNavigate, Link } from 'react-router-dom'; 
 
 const StarterTest = () => {
