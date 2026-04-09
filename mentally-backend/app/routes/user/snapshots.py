@@ -1,22 +1,8 @@
-import os
 from datetime import datetime
-from typing import List
+from fastapi import APIRouter
 
-import pyrebase
-from fastapi import FastAPI, APIRouter, BackgroundTasks
-from fastapi.responses import JSONResponse
-from fastapi.exceptions import HTTPException
-from fastapi.requests import Request
-from dotenv import load_dotenv
-
-import firebase_admin
-from firebase_admin import credentials, firestore
-
-from .firebase_init import fireBaseConfig, db, firebase
-from app.models.models_user_data import UserSchema, MentalHealthData, SnapShotRequest
-
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.events import EVENT_JOB_EXECUTED, EVENT_JOB_ERROR
+from .firebase_init import db
+from app.models.models_user_data import SnapShotRequest
 
 router = APIRouter()
 
@@ -72,17 +58,8 @@ async def create_snapshots():
                 }
             })
 
-    print("Snapshots created for all users.")
-
-
-"""
-@brief  Implementation of daily snapshots taken every 24 hours.
-        TODO: Fix lol
-
-"""
-
-
 from fastapi_utils.tasks import repeat_every
+
 
 @router.on_event("startup")
 @repeat_every(seconds=1 * 60* 60 * 24)  # Run every 24 Hours

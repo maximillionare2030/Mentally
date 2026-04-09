@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import MCQ from "../components/mcq.jsx";
+import { Link } from "react-router-dom";
 import { sleep, typeText } from "../utils/util.js";
 
 const Landing = () => {
@@ -33,13 +33,6 @@ const Landing = () => {
   useEffect(() => {
     runTypingSequence();
   }, []);
-
-  // Scroll to the MCQ section
-  const scrollToMCQ = () => {
-    if (MCQ_container.current) {
-      MCQ_container.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   // Scroll to the Mental Health Test section
   const scrollToTest = () => {
@@ -95,12 +88,12 @@ const Landing = () => {
         <p className="text-xl text-gray-700 mb-8">
           This test is designed by mental health professionals and supported by extensive research. Your results are confidential and intended to guide your well-being journey.
         </p>
-        <a
-          href="/starter-test"
+        <Link
+          to="/starter-test"
           className="bg-lavendar text-3xl text-white font-medium py-3 px-8 rounded-lg hover:bg-darkLavendar transition-colors duration-300"
         >
           Access the Test
-        </a>
+        </Link>
       </div>
     </div>
   </div>

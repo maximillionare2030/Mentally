@@ -1,5 +1,5 @@
-from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from pydantic import BaseModel, Field
+from typing import Optional, Any
 from datetime import datetime
 
 class MentalHealthData(BaseModel):
@@ -10,15 +10,15 @@ class MentalHealthData(BaseModel):
     @attributes
         see below for more information
     """
-    happiness: Optional[int] = 0
-    sadness: Optional[int] = 0
-    fear: Optional[int] = 0
-    anger: Optional[int] = 0
-    surprise: Optional[int] = 0
-    disgust: Optional[int] = 0
-    PHQ_score: Optional[int] = 0
-    BDI_score: Optional[int] = 0
-    notes : Optional[str] = ""
+    happiness: Optional[int] = Field(default=0, ge=-100, le=100)
+    sadness: Optional[int] = Field(default=0, ge=-100, le=100)
+    fear: Optional[int] = Field(default=0, ge=-100, le=100)
+    anger: Optional[int] = Field(default=0, ge=-100, le=100)
+    surprise: Optional[int] = Field(default=0, ge=-100, le=100)
+    disgust: Optional[int] = Field(default=0, ge=-100, le=100)
+    PHQ_score: Optional[int] = Field(default=0, ge=0, le=27)
+    BDI_score: Optional[int] = Field(default=0, ge=0, le=63)
+    notes: Optional[str] = ""
 
 class UserSchema(BaseModel):
     """

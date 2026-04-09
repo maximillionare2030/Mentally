@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from app.models.models_user_data import MentalHealthData
 
 class OpenAIRequest(BaseModel):
     """
@@ -15,4 +16,9 @@ class OpenAIRequest(BaseModel):
                 "prompt": "What time is it?",
             }
         }
+
+
+class BuddyChatRequest(BaseModel):
+    request: OpenAIRequest
+    data: MentalHealthData
 

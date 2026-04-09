@@ -12,14 +12,8 @@ import ChatBot from "./pages/ChatBot";
 
 
 const App = () => {
-    
-
     return (
-        <div>
-            {/*<header>
-                <h1>Mentally</h1>
-            </header>*/}
-            <main>
+        <main>
                 <Routes>
                     <Route path="/" element={<Landing/>}/>
                     <Route path="/starter-test" element={<StarterTest/>}/>
@@ -30,9 +24,8 @@ const App = () => {
                     <Route path="/emotion-tests" element={<EmotionTests/>}/>
                     <Route path="/chat-bot" element={<ChatBot/>}/>
                     <Route path="*" element={<NotFound/>}/>
-                </Routes>   
-            </main>
-        </div>
+                </Routes>
+        </main>
     );
 };
 

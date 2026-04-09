@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { logIn, getUserData } from "../utils/api/user.js";
-import { useNavigate, useLocation } from 'react-router-dom'; 
+import { useNavigate, Link } from 'react-router-dom';
+import { setStoredUserData } from '../utils/storage.js';
 
 
 const LogInForm = () => {
 
-    const location = useLocation();
     const navigate = useNavigate();
-    const queryParams = new URLSearchParams(location.search);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -16,20 +15,16 @@ const LogInForm = () => {
     const handleLogIn = async (e) => {
         e.preventDefault();
         try {
-            console.log("Attempting to sign in...")
             const response = await logIn(email, password);
-            // Ensure response.message is a string before setting it to state
-            setSignUpStatus(response.message);
+            setSignUpStatus(response.message || "");
     
             if (response.token) {
                 const userData = await getUserData(response.token);
-                localStorage.setItem('userData', JSON.stringify(userData)); 
+                setStoredUserData(userData);
                 navigate('/account', { state: { userData } });
             }
         } catch (error) {
-            console.log("Login Failed")
-            const response = await logIn(email, password);
-            setSignUpStatus("Error logging in: " + response);
+            setSignUpStatus(error.message || "Error logging in.");
         }
     };
 
@@ -77,11 +72,9 @@ const LogInForm = () => {
                 </div>
                 <p className="text-gray-600 text-sm mt-4">
                     Don't have an account?{" "}
-                    <a 
-                    href="/signup" 
-                    className="text-blue-500 hover:underline">
+                    <Link to="/signup" className="text-blue-500 hover:underline">
                         Sign Up
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>

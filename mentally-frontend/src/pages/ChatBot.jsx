@@ -1,18 +1,19 @@
 import { React, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { generate_buddy_response } from '../utils/api/openai';
+import { generateBuddyResponse } from '../utils/api/openai';
+import { clearStoredUserData, getStoredUserData } from '../utils/storage.js';
 
 const Chatbot = () => {
+    const navigate = useNavigate();
     const [chatHistory, setChatHistory] = useState([
         { sender: 'bot', message: 'Hello, how can I assist you today?' }
     ]);
     const [userInput, setUserInput] = useState('');
 
-    const storedUserData = localStorage.getItem('userData');
-    const parsedUserData = JSON.parse(storedUserData);
-    const { currentJWT, mental_health_data } = parsedUserData;
+    const parsedUserData = getStoredUserData();
+    const mental_health_data = parsedUserData?.mental_health_data;
 
     const handleUserInput = async () => {
         if (userInput.trim() === '') return;
@@ -30,7 +31,7 @@ const Chatbot = () => {
     
         try {
             // Await the API response
-            const response = await generate_buddy_response(userInput, mental_health_data);
+            const response = await generateBuddyResponse(userInput, mental_health_data);
     
             // Remove the "typing" message and add the actual response
             setChatHistory((prev) => {
@@ -53,7 +54,23 @@ const Chatbot = () => {
     };
     
 
-    const navigate = useNavigate();
+    const handleSignOut = () => {
+        clearStoredUserData();
+        navigate('/');
+    };
+
+    if (!mental_health_data) {
+        return (
+            <div className="min-h-screen bg-gradient-to-b from-mint via-mint to-dimGrey flex items-center justify-center">
+                <div className="bg-white rounded-lg p-8 shadow-lg text-center">
+                    <p className="mb-4">Please log in to use the Mentally assistant.</p>
+                    <Link to="/login" className="text-blue-600 hover:underline">
+                        Go to login
+                    </Link>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-mint via-mint to-dimGrey flex flex-col items-center">
@@ -63,10 +80,8 @@ const Chatbot = () => {
                     {/* You can add a logo or title here */}
                 </div>
                 <div className="flex items-center gap-4">
-                    <FontAwesomeIcon icon={faSignOutAlt} className="cursor-pointer" onClick={() => navigate('/')} />
-                    <a href="/account" className="">
-                        Dashboard
-                    </a>
+                    <FontAwesomeIcon icon={faSignOutAlt} className="cursor-pointer" onClick={handleSignOut} />
+                    <Link to="/account">Dashboard</Link>
                 </div>
             </div>
 

@@ -1,18 +1,35 @@
-from fastapi import FastAPI, APIRouter, HTTPException
-from app.models.models_openai import OpenAIRequest
-from app.models.models_user_data import MentalHealthData
-import openai
+from fastapi import APIRouter, HTTPException
+from app.models.models_openai import OpenAIRequest, BuddyChatRequest
 from openai import OpenAI
 
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from app.core.config import get_settings
 router = APIRouter()
 
+settings = get_settings()
 client = OpenAI(
-    api_key = os.getenv('OPENAI_API_KEY'),
+    api_key=settings.openai_api_key,
 )
+
+
+def _create_chat_completion(prompt: str, max_tokens: int) -> str:
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are the Mentally assistant. Respond with concise, supportive guidance, "
+                    "avoid overclaiming, and do not present yourself as a licensed clinician."
+                ),
+            },
+            {"role": "user", "content": prompt},
+        ],
+        max_tokens=max_tokens,
+        temperature=0.7,
+    )
+    return response.choices[0].message.content.strip()
+
+
 @router.post("/generate-mental-health-tests/")
 async def generate_text_mental(request: OpenAIRequest):
     """
@@ -47,26 +64,19 @@ async def generate_text_mental(request: OpenAIRequest):
     """
     
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": trained_prompt}],
-            max_tokens=100,
-            temperature=0.7,
-        )
-        return {"response": response.choices[0].message.content.strip()}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"OpenAI API error: {str(e)}")
+        return {"response": _create_chat_completion(trained_prompt, max_tokens=100)}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail="OpenAI API error.") from exc
 
 @router.post("/chat-bot-buddy/")
-async def generate_buddy_response(request: OpenAIRequest, data: MentalHealthData):
+async def generate_buddy_response(payload: BuddyChatRequest):
     """
     @brief  Endpoint to generate text using OpenAI API, but for the ChatBOT feature
 
     @param  
     """
-    # Verify the incoming data and prompt
-    print("Received mental health data:", data)
-    print("Received user prompt:", request.prompt)
+    request = payload.request
+    data = payload.data
 
     trained_prompt = f"""
     1. You are an AI Chatbot for a Mental health Tracking app called 'Mentally'.
@@ -91,15 +101,9 @@ async def generate_buddy_response(request: OpenAIRequest, data: MentalHealthData
     """
 
     try:
-        response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": trained_prompt}],
-            max_tokens=200,
-            temperature=0.7,
-        )
-        return {"response": response.choices[0].message.content.strip()}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"OpenAI API error: {str(e)}")
+        return {"response": _create_chat_completion(trained_prompt, max_tokens=200)}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail="OpenAI API error.") from exc
 
     
 """

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { signUp, logIn, getUserData, updateUserData } from "../utils/api/user.js";
-import { useNavigate, useLocation } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { setStoredUserData } from '../utils/storage.js';
 
 const SignUpForm = () => {
     const navigate = useNavigate();
@@ -25,47 +26,31 @@ const SignUpForm = () => {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        console.log('SignUp process started');
     
         try {
-            console.log('Sending sign-up request...');
             const signUpResponse = await signUp(nickname, email, password);
-            console.log('Sign-up response:', signUpResponse);
     
             if (signUpResponse.message === "User account created successfully") {
-                console.log("Sign-up successful, proceeding to log in...");
-    
                 const logInResponse = await logIn(email, password);
-                console.log('Log-in response:', logInResponse);
     
                 if (!logInResponse?.token) {
                     throw new Error("Login failed: No token received.");
                 }
     
                 if (PHQ_score) {
-                    console.log('Updating mental health data with PHQ_score:', PHQ_score);
-                    const updateResponse = await updateUserData(logInResponse.token, { PHQ_score });
-                    console.log('Mental health data updated successfully:', updateResponse);
+                    await updateUserData(logInResponse.token, { PHQ_score: Number(PHQ_score) });
                 }
     
-                console.log('Fetching user data...');
                 const userData = await getUserData(logInResponse.token);
-                console.log('User data retrieved:', userData);
-    
-                localStorage.setItem('userData', JSON.stringify(userData));
-                console.log('User data saved to localStorage');
+                setStoredUserData(userData);
     
                 navigate('/account', { state: { userData } });
-                console.log('Navigation to /account completed');
-            } else if (typeof signUpResponse === "string") {
-                setSignUpStatus(signUpResponse);
             } else if (typeof signUpResponse === "object" && signUpResponse.message) {
                 setSignUpStatus(signUpResponse.message);
             } else {
                 setSignUpStatus("An unexpected error occurred during sign-up.");
             }
         } catch (error) {
-            console.error('Error during sign-up process:', error);
             setSignUpStatus(error.message || "Unknown error occurred");
         }
     };
@@ -113,12 +98,9 @@ const SignUpForm = () => {
                 </div>
                 <p className="text-gray-600 text-sm mt-4">
                     Already have an account?{" "}
-                    <a 
-                        href="/login" 
-                        className="text-blue-500 hover:underline"
-                    >
+                    <Link to="/login" className="text-blue-500 hover:underline">
                         Log in
-                    </a>
+                    </Link>
                 </p>
             </div>
         </div>

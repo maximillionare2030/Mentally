@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { sleep } from "../utils/util.js";
 
 function MCQ({ className, question, responses, onResponseSelect }) {
   const [selectedIndex, setSelectedIndex] = useState(null);  // Track selected index locally

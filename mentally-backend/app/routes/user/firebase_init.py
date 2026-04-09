@@ -1,15 +1,26 @@
 import os
 from dotenv import load_dotenv
-load_dotenv()
 import firebase_admin
 from firebase_admin import credentials, firestore
 import pyrebase
+from app.core.config import get_settings
+
+load_dotenv()
+
+settings = get_settings()
+
+
+def _get_service_account_path() -> str:
+    if settings.firebase_service_account:
+        return settings.firebase_service_account
+
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_dir, "serviceAccount.json")
 
 # Initialize Firebase Admin SDK
 if not firebase_admin._apps:
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    serviceAccount = os.path.join(BASE_DIR, "serviceAccount.json")
-    cred = credentials.Certificate(serviceAccount)
+    service_account = _get_service_account_path()
+    cred = credentials.Certificate(service_account)
     firebase_admin.initialize_app(cred)
 
 # Initialize Firestore client

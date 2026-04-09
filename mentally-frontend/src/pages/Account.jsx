@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { getUserData } from "../utils/api/user.js"; // Assuming getUserData is imported from the correct path
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { updateUserData, getUserHistory } from '../utils/api/user.js';
+import { getUserHistory } from '../utils/api/user.js';
 
 import { Fragment } from 'react';  // Add this import
 import { Menu, Transition} from '@headlessui/react';
@@ -12,6 +12,7 @@ import data from "../utils/mental-health-tests.json";
 
 import UserCalendar from "../components/ui/calendar.jsx";
 import LineGraph from '../components/ui/linegraph.jsx';
+import { clearStoredUserData, getStoredUserData, setStoredUserData } from '../utils/storage.js';
 
 
 const Account = () => {
@@ -25,17 +26,16 @@ const Account = () => {
     const navigate = useNavigate();
 
     const fetchUserData = async () => {
-        const storedUserData = localStorage.getItem('userData');
-        
-        if (storedUserData) {
-            const parsedUserData = JSON.parse(storedUserData);
+        const parsedUserData = getStoredUserData();
+
+        if (parsedUserData) {
             const { currentJWT } = parsedUserData;
             
             try {
                 const updatedData = await getUserData(currentJWT);
                 
                 if (updatedData) {
-                    localStorage.setItem('userData', JSON.stringify(updatedData));
+                    setStoredUserData(updatedData);
                     setUserData(updatedData);
                 } else {
                     setError('User data could not be fetched');
@@ -55,22 +55,29 @@ const Account = () => {
     };
 
     const fetchUserHistory = async () => {
-        const history = await getUserHistory(userData?.user_id);
+        const history = await getUserHistory(userData?.currentJWT, userData?.user_id);
         setUserHistory(history?.snapshot_doc);
-        console.log(userHistory);
-    }
+    };
     
 
 
     // Trigger the user data fetch first
     useEffect(() => {
-        fetchUserData();
+        const loadUserData = async () => {
+            await fetchUserData();
+        };
+
+        loadUserData();
     }, []);  // Runs once when the component mounts
 
     // Trigger the user history fetch once userData is available
     useEffect(() => {
         if (userData) {
-            fetchUserHistory();  // Fetch user history only after userData is set
+            const loadUserHistory = async () => {
+                await fetchUserHistory();
+            };
+
+            loadUserHistory();
         }
     }, [userData]);  // Runs when userData is updated
 
@@ -90,12 +97,17 @@ const Account = () => {
         );
     }
 
-    const { user_id, email, nickname, mental_health_data } = userData;
+    const { nickname, mental_health_data } = userData;
     const { surprise, disgust, happiness, BDI_score, PHQ_score, anger, sadness, fear } = mental_health_data;
 
     const scrollToInstructions = () => {
         const instructionsSection = document.getElementById('instructions');
         instructionsSection?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    const handleSignOut = () => {
+        clearStoredUserData();
+        navigate('/');
     };
 
 
@@ -112,8 +124,8 @@ const Account = () => {
                     <h1 className="font-semibold">Mentally</h1>
                 </div>
                 <div className="flex items-center gap-4">
-                    <FontAwesomeIcon icon={faSignOutAlt} className="cursor-pointer" onClick={() => navigate('/')} />
-                    <a href="/account" className="">Dashboard</a>
+                    <FontAwesomeIcon icon={faSignOutAlt} className="cursor-pointer" onClick={handleSignOut} />
+                    <Link to="/account">Dashboard</Link>
                 </div>
             </div>
 
@@ -193,12 +205,13 @@ const Account = () => {
                                 <Menu.Item key={testKey}>
                                     {({ active }) => (
                                         <div className="group">
-                                            <a
+                                            <button
+                                                type="button"
                                                 onClick={() => navigate(`/user-tests/`, { state: { testKey } })}
                                                 className={`block px-4 py-2 text-sm transition-colors duration-200 ${active ? 'bg-blue-600 text-white' : 'text-gray-900'} cursor-pointer`}
                                             >
                                                 {testKey}
-                                            </a>
+                                            </button>
 
                                             {active && (
                                                 <p className="text-xs opacity-0 group-hover:opacity-100 transition-opacity mt-1 text-gray-500">
@@ -238,12 +251,13 @@ const Account = () => {
                                 <Menu.Item key={testKey}>
                                     {({ active }) => (
                                         <div className="group">
-                                            <a
+                                            <button
+                                                type="button"
                                                 onClick={() => navigate(`/emotion-tests/`, { state: { testKey } })}
                                                 className={`block px-4 py-2 text-sm transition-colors duration-200 ${active ? 'bg-blue-600 text-white' : 'text-gray-900'} cursor-pointer`}
                                             >
                                                 {testKey}
-                                            </a>
+                                            </button>
 
                                             {active && (
                                                 <p className="text-xs opacity-0 group-hover:opacity-100 transition-opacity mt-1 text-gray-500">

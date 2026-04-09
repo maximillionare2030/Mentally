@@ -1,18 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import { generate_response } from '../utils/api/openai.js';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { generateResponse } from '../utils/api/openai.js';
 import { updateUserData } from '../utils/api/user.js';
 import MCQ from "../components/mcq.jsx";
 
 import data from "../utils/mental-health-tests.json";
-import { getUserData } from '../utils/api/user.js';
+import { getStoredUserData } from '../utils/storage.js';
 
 const EmotionTets = () => {
     const navigate = useNavigate();
-    const storedUserData = localStorage.getItem('userData');
-    const userData = JSON.parse(storedUserData);
+    const userData = getStoredUserData();
     const currentJWT = userData?.currentJWT;
     const { state } = useLocation();
     const testKey = (state?.testKey);
@@ -33,7 +32,6 @@ const EmotionTets = () => {
         const responseKeys = Object.keys(questions[questionIndex]?.responses || {});
         setSelectedIndex(key);
         setSelectedResponse(responseKeys[key]);
-        console.log(emotionDelta);
     }
 
     const handleNewEmotion = () => {
@@ -54,7 +52,7 @@ const EmotionTets = () => {
     
         const handleOpenAIResponse = async (prompt) => {
             try {
-                const response = await generate_response(prompt);
+                const response = await generateResponse(prompt);
                 setOpenAIresponse(response.response);
 
 
@@ -95,7 +93,7 @@ const EmotionTets = () => {
             <div className="text-2xl font-semibold"></div>
             <div className="flex items-center gap-4">
                 <FontAwesomeIcon icon={faSignOutAlt} className="cursor-pointer" onClick={() => navigate('/account')} />
-                <a href="/account" className="">Dashboard</a>
+                <Link to="/account">Dashboard</Link>
             </div>
         </div>
         <div className="w-1/2 p-8 bg-white items-center justify-center rounded-lg shadow-lg">

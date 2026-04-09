@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MCQ from "../components/mcq.jsx";
 import data from "../utils/mental-health-tests.json";
-import { useNavigate, useLocation } from 'react-router-dom';
-import { generate_response } from '../utils/api/openai.js';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { generateResponse } from '../utils/api/openai.js';
 import { updateUserData } from '../utils/api/user.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { getStoredUserData } from '../utils/storage.js';
 
 
 const MentalHealthTests = () => {
@@ -23,8 +24,7 @@ const MentalHealthTests = () => {
     const [openAIResponse, setOpenAIresponse] = useState("");
     const scoreTestRef = useRef(0);
 
-    const storedUserData = localStorage.getItem('userData');
-    const userData = JSON.parse(storedUserData);
+    const userData = getStoredUserData();
     const currentJWT = userData?.currentJWT;
 
     const handleResponseSelect = (key) => {
@@ -37,15 +37,14 @@ const MentalHealthTests = () => {
 
     const handleOpenAIResponse = async (prompt) => {
         try {
-            const response = await generate_response(prompt);
+            const response = await generateResponse(prompt);
             setOpenAIresponse(response.response);
     
             // Prepare the data to update
             const dataToUpdate = {
-                ...userData?.mentalHealthData, // Preserve existing data
+                ...userData?.mental_health_data,
                 [testKey === "PHQ-9" ? "PHQ_score" : "BDI_score"]: scoreTestRef.current, // Dynamically update the right score
             };
-            console.log("Front end:" , dataToUpdate)
     
             await handleUpdateUserData(dataToUpdate);
         } catch (error) {
@@ -56,7 +55,6 @@ const MentalHealthTests = () => {
     const handleUpdateUserData = async (dataToUpdate) => {
         try {
             if (currentJWT) {
-                console.log(dataToUpdate);
                 await updateUserData(currentJWT, dataToUpdate);
             } else {
                 console.warn("No valid JWT token found. Skipping user data update.");
@@ -98,7 +96,7 @@ const MentalHealthTests = () => {
                 <div className="text-2xl font-semibold"></div>
                 <div className="flex items-center gap-4">
                     <FontAwesomeIcon icon={faSignOutAlt} className="cursor-pointer" onClick={() => navigate('/account')} />
-                    <a href="/account" className="">Dashboard</a>
+                    <Link to="/account">Dashboard</Link>
                 </div>
             </div>
 

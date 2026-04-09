@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MCQ from "../components/mcq.jsx";
 import data from "../utils/mental-health-tests.json";
-import { signUp } from "../utils/api/user.js";
-import { useNavigate, Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 
 const StarterTest = () => {
     const [questionIndex, setQuestionIndex] = useState(0);
@@ -10,9 +9,6 @@ const StarterTest = () => {
     const [testComplete, setTestComplete] = useState(false);
     const [scorePHQ, setScorePHQ] = useState(0);
     const [fade, setFade] = useState(false);
-
-    // Initialize the navigate function
-    const navigate = useNavigate();
 
     const handleResponseSelect = (index) => {
         setSelectedIndex(index);  // Update the selected index when a response is selected
@@ -74,7 +70,7 @@ const StarterTest = () => {
                 )}
                 {testComplete && (
                     <div 
-                        className={"flex flex-col items-center justify-center mt-8 transition-opacity duration-2000 ${fade ? 'opacity-0' : 'opacity-100'}"}
+                        className={`flex flex-col items-center justify-center mt-8 transition-opacity duration-2000 ${fade ? 'opacity-0' : 'opacity-100'}`}
                     >
                         <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">
                             Sign Up to Get Your Score!
@@ -96,12 +92,9 @@ const StarterTest = () => {
                         </div>
                         <p className="text-gray-600 text-sm mt-4">
                             Already have an account?{" "}
-                            <a 
-                                href="/login" 
-                                className="text-blue-500 hover:underline"
-                            >
+                            <Link to="/login" className="text-blue-500 hover:underline">
                                 Log in
-                            </a>
+                            </Link>
                         </p>
                     </div>
                 )}

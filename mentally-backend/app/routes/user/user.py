@@ -1,18 +1,12 @@
-import pyrebase
-from fastapi import FastAPI, APIRouter, Query
+from fastapi import APIRouter, Query, Request, status
 from app.models.models_user_auth import LoginSchema, SignUpSchema
 from app.models.models_user_data import UserSchema, MentalHealthData
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
-from fastapi.requests import Request
+from firebase_admin import auth
 
-import os
-from dotenv import load_dotenv
-
-import firebase_admin
-from firebase_admin import credentials, auth, firestore
-
-from .firebase_init import fireBaseConfig, db, firebase
+from .firebase_init import db, firebase
+from app.core.auth import get_authenticated_user_id
 
 router = APIRouter()    # Creates Blueprint for router to main.py
 
@@ -46,23 +40,25 @@ async def create_account(user_data: SignUpSchema):
         )
 
         # Store the user data in Firestore
-        user_dict = user_schema.dict()  # Convert UserSchema to dictionary
+        user_dict = user_schema.dict()
         doc_ref = db.collection("users").document(user_schema.user_id)
-        doc_ref.set(user_dict)  # Store the dictionary in Firestore
+        doc_ref.set(user_dict)
 
-        return JSONResponse(content={"message": f"User account created successfully"},
-                            status_code=202)
+        return JSONResponse(
+            content={"message": "User account created successfully"},
+            status_code=status.HTTP_201_CREATED,
+        )
 
     except auth.EmailAlreadyExistsError:
         raise HTTPException(
-            status_code=400,
-            detail=f"Account already created for the email {email}"
+            status_code=status.HTTP_409_CONFLICT,
+            detail=f"Account already created for the email {email}",
         )
-    except Exception as e:
+    except Exception as exc:
         raise HTTPException(
-            status_code=401,
-            detail=f"An error occurred: {str(e)}"
-        )
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to create account.",
+        ) from exc
 
 
 
@@ -82,29 +78,31 @@ async def create_access_token(user_data: LoginSchema):
     try:
         user = firebase.auth().sign_in_with_email_and_password(email=email, password=password)
         token = user['idToken']
-        expires_in = 5 * 24 * 60 * 60  # 5 days in seconds TODO: Implement longer lasting JWT tokens -- fk trying to asynchronously refresh
-        
+
         # Fetch the user by their UID from Firestore
         user_ref = db.collection("users").document(user['localId'])
-        
+
         # Update the JWT in Firestore
         user_ref.update({"currentJWT": token})
 
-        return JSONResponse(content={
-                                        "message": "Log in Successful",
-                                        "token": token}, status_code=200)
-    except Exception as e:
-        raise HTTPException(status_code=400, detail="Invalid credentials")
+        return JSONResponse(
+            content={
+                "message": "Log in successful",
+                "token": token,
+            },
+            status_code=status.HTTP_200_OK,
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+        ) from exc
 
 
 
 @router.post('/ping')
 async def validate_token(request: Request):
-    headers = request.headers
-    jwt = headers.get('authorization')
-    user = auth.verify_id_token(jwt)
-
-    return user['uid']
+    return {"user_id": get_authenticated_user_id(request)}
 
 @router.post('/get_user_data')
 def get_user_data(request: Request):
@@ -115,17 +113,8 @@ def get_user_data(request: Request):
 
     @returns  A dictionary of user data
     """
-    headers = request.headers
-    jwt = headers.get('Authorization')
-
-    if not jwt:
-        raise HTTPException(status_code=400, detail="Token not provided")
-
     try:
-
-        # Verify the token
-        user = auth.verify_id_token(jwt)
-        uid = user['uid']
+        uid = get_authenticated_user_id(request)
 
         # Fetch the user data from Firestore
         user_data_ref = db.collection("users").document(uid)
@@ -135,8 +124,13 @@ def get_user_data(request: Request):
             raise HTTPException(status_code=404, detail="User data not found")
 
         return user_data.to_dict()  # Return the user data as a dictionary
-    except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Invalid credentials: {str(e)}")
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to fetch user data.",
+        ) from exc
 
 
 @router.post('/update-mental-data')
@@ -148,16 +142,8 @@ async def update_mental_data(request: Request, data: MentalHealthData):
             data (MentalHealthData) : a JSON object MentalHealthData. Not all attributes need to be filled, so overwriting only happens when included
     @returns  A success/fail message
     """
-    headers = request.headers
-    jwt = headers.get('Authorization')
-
-    if not jwt:
-        raise HTTPException(status_code=400, detail="Token not provided")
-    
     try:
-        # Verify the token
-        user = auth.verify_id_token(jwt)
-        uid = user['uid']
+        uid = get_authenticated_user_id(request)
 
         # Get the existing mental_health_data
         user_data_ref = db.collection("users").document(uid)
@@ -174,20 +160,32 @@ async def update_mental_data(request: Request, data: MentalHealthData):
         else:
             raise HTTPException(status_code=404, detail="User not found")
 
-    except Exception as e:
-        raise HTTPException(status_code=401, detail=f"Invalid credentials: {str(e)}")
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Unable to update mental health data.",
+        ) from exc
 
-    return "Successfully updated data"
+    return {"message": "Successfully updated data"}
 
 
 @router.post('/get-user-history')
-async def get_user_history(user_id: str = Query(...)):
+async def get_user_history(request: Request, user_id: str = Query(...)):
     """
     @brief  Endpoint that gets the user_snapshots doc from their user_id
     @param  user_id: The document ID (primary key)
     @returns User's snapshot doc in JSON format
     """
     try:
+        requester_user_id = get_authenticated_user_id(request)
+        if requester_user_id != user_id:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You can only access your own snapshot history.",
+            )
+
         # Reference the document
         user_data_ref = db.collection("user_snapshots").document(user_id)
 
@@ -195,11 +193,13 @@ async def get_user_history(user_id: str = Query(...)):
         user_doc = user_data_ref.get()
 
         if user_doc.exists:
-            print("Document data fetched successfully.")
             return user_doc.to_dict()
         else:
             raise HTTPException(status_code=404, detail=f"User document with ID {user_id} not found.")
-    
-    except Exception as e:
-        print(f"Error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal server error while fetching user history.",
+        ) from exc

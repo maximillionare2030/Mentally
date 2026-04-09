@@ -1,49 +1,45 @@
-from fastapi import FastAPI, APIRouter, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
-from dotenv import load_dotenv
-
-import os
-from dotenv import load_dotenv
 
 from app.routes.user.user import router as user_router
 from app.routes.user.snapshots import router as snapshot_router
 from app.routes.openai.openai import router as openai_router
-
-load_dotenv()  # Load environment variables from .env file
-
-
-app = FastAPI(
-    description = "Mentally app",
-    title="Mentally Backend Server with Firebase")
+from app.core.config import get_settings
 
 
-# Define CORS settings
-origins = [
-    os.getenv("REACT_APP_URL", "http://localhost:3000"),
-]
-
-# Add CORSMiddleware to the app
-app.add_middleware(
-CORSMiddleware,
-allow_origins=["*"], # Allows all origins
-allow_credentials=True,
-allow_methods=["*"], # Allows all methods
-allow_headers=["*"], # Allows all headers
-)
-
-app.include_router(user_router, prefix="/user")
-app.include_router(snapshot_router, prefix="/db")
-app.include_router(openai_router, prefix="/openai")
+settings = get_settings()
 
 
-@app.get("/")
-def read_root():
-    #api_url = os.getenv("API_URL", "default_value")
-    return {"message": "hello-update"}
+def create_app() -> FastAPI:
+    app = FastAPI(
+        title=settings.app_title,
+        description=settings.app_description,
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.allowed_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
+    app.include_router(user_router, prefix="/user", tags=["user"])
+    app.include_router(snapshot_router, prefix="/db", tags=["snapshots"])
+    app.include_router(openai_router, prefix="/openai", tags=["openai"])
+
+    @app.get("/", summary="Health check")
+    def read_root():
+        return {
+            "status": "ok",
+            "service": "mentally-backend",
+        }
+
+    return app
+
+
+app = create_app()
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="localhost", port=8000, reload=True)
-
-
-# Run command: .\venv\Scripts\Activate.ps1, pytho main.py2
+    uvicorn.run("main:app", host=settings.api_host, port=settings.api_port, reload=True)
